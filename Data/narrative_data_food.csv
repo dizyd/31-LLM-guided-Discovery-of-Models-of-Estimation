@@ -1,5 +1,5 @@
-ID;narrative;domain
-02m3zllu1k3s;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+ID,narrative,domain
+02m3zllu1k3s,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -214,8 +214,8 @@ Item: Peanuts. You say that the carbohydrate content is <<10>>.
 Item: Salmon. You say that the carbohydrate content is <<2>>.
 Item: Spaghetti. You say that the carbohydrate content is <<28>>.
 Item: Gummy bears. You say that the carbohydrate content is <<77>>.
-Item: Cream cheese. You say that the carbohydrate content is <<10>>.";Food
-0ba3662lv6vw;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Cream cheese. You say that the carbohydrate content is <<10>>.",Food
+0ba3662lv6vw,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -430,8 +430,8 @@ Item: Apricot. You say that the carbohydrate content is <<5>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Bell pepper. You say that the carbohydrate content is <<2>>.
 Item: Cherry jam. You say that the carbohydrate content is <<45>>.
-Item: Dextrose. You say that the carbohydrate content is <<80>>.";Food
-0xhc0yxm5czl;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Dextrose. You say that the carbohydrate content is <<80>>.",Food
+0xhc0yxm5czl,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -586,8 +586,8 @@ Item: Tiger. You say that the carbohydrate content is <<1268>>.
 Item: Brown bear. You say that the carbohydrate content is <<1600>>.
 Item: Least weasel. You say that the carbohydrate content is <<300>>.
 Item: Red panda. You say that the carbohydrate content is <<550>>.
-Item: Aoudad. You say that the carbohydrate content is <<600>>.";Food
-15er40f6hrc7;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Aoudad. You say that the carbohydrate content is <<600>>.",Food
+15er40f6hrc7,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -742,8 +742,8 @@ Item: Solomon Islands. You say that the carbohydrate content is <<80>>.
 Item: Democratic Republic of the Congo. You say that the carbohydrate content is <<78>>.
 Item: Nigeria. You say that the carbohydrate content is <<77>>.
 Item: Ethiopia. You say that the carbohydrate content is <<76>>.
-Item: Yemen. You say that the carbohydrate content is <<75>>.";Food
-18wkffvb0nro;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Yemen. You say that the carbohydrate content is <<75>>.",Food
+18wkffvb0nro,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -898,8 +898,8 @@ Item: Rice. You say that the carbohydrate content is <<50>>.
 Item: Cheesecake. You say that the carbohydrate content is <<60>>.
 Item: Dextrose. You say that the carbohydrate content is <<0>>.
 Item: Mozzarella. You say that the carbohydrate content is <<31>>.
-Item: Corn. You say that the carbohydrate content is <<14>>.";Food
-19x6o075e4oy;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Corn. You say that the carbohydrate content is <<14>>.",Food
+19x6o075e4oy,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -1054,8 +1054,8 @@ Item: Suriname. You say that the carbohydrate content is <<87>>.
 Item: Greece. You say that the carbohydrate content is <<76.5>>.
 Item: Vatican City. You say that the carbohydrate content is <<54.6>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
-Item: Moldova. You say that the carbohydrate content is <<65.5>>.";Food
-1jyepxdsepby;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Moldova. You say that the carbohydrate content is <<65.5>>.",Food
+1jyepxdsepby,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -1210,8 +1210,8 @@ Item: Cuba. You say that the carbohydrate content is <<77>>.
 Item: Angola. You say that the carbohydrate content is <<71>>.
 Item: El Salvador. You say that the carbohydrate content is <<72>>.
 Item: Costa Rica. You say that the carbohydrate content is <<82>>.
-Item: Tuvalu. You say that the carbohydrate content is <<77>>.";Food
-1nziths5mtj0;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Tuvalu. You say that the carbohydrate content is <<77>>.",Food
+1nziths5mtj0,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -1378,8 +1378,8 @@ Item: Jamaica. You say that the carbohydrate content is <<70>>.
 Item: Moldova. You say that the carbohydrate content is <<72>>.
 Item: Solomon Islands. You say that the carbohydrate content is <<74>>.
 Item: Dominica. You say that the carbohydrate content is <<75>>.
-Item: Saint Kitts and Nevis. You say that the carbohydrate content is <<70>>.";Food
-1r4upum7lxhi;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Saint Kitts and Nevis. You say that the carbohydrate content is <<70>>.",Food
+1r4upum7lxhi,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -1534,8 +1534,8 @@ Item: Nigeria. You say that the carbohydrate content is <<54>>.
 Item: Suriname. You say that the carbohydrate content is <<69>>.
 Item: United Arab Emirates. You say that the carbohydrate content is <<64>>.
 Item: Nepal. You say that the carbohydrate content is <<76>>.
-Item: Argentina. You say that the carbohydrate content is <<77>>.";Food
-2qewr80masfh;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Argentina. You say that the carbohydrate content is <<77>>.",Food
+2qewr80masfh,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -1714,8 +1714,8 @@ Item: Orangutan. You say that the carbohydrate content is <<1600>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Bat-eared fox. You say that the carbohydrate content is <<450>>.
 Item: Tasmanian devil. You say that the carbohydrate content is <<370>>.
-Item: Degu. You say that the carbohydrate content is <<235>>.";Food
-2uo14k0xw9m4;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Degu. You say that the carbohydrate content is <<235>>.",Food
+2uo14k0xw9m4,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -1882,8 +1882,8 @@ Item: Raspberry jam. You say that the carbohydrate content is <<34>>.
 Item: Potatoes. You say that the carbohydrate content is <<45>>.
 Item: Chicken. You say that the carbohydrate content is <<22>>.
 Item: White toast. You say that the carbohydrate content is <<52>>.
-Item: Cookies. You say that the carbohydrate content is <<20>>.";Food
-34tcwd0j5qgq;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Cookies. You say that the carbohydrate content is <<20>>.",Food
+34tcwd0j5qgq,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -2062,8 +2062,8 @@ Item: Australian tiger cat. You say that the carbohydrate content is <<305>>.
 Item: African wild dog. You say that the carbohydrate content is <<560>>.
 Item: Bactrian camel. You say that the carbohydrate content is <<3654>>.
 Item: Duck-billed platypus. You say that the carbohydrate content is <<546>>.
-Item: Horse. You say that the carbohydrate content is <<256>>.";Food
-38b8w4u86tp9;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Horse. You say that the carbohydrate content is <<256>>.",Food
+38b8w4u86tp9,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -2218,8 +2218,8 @@ Item: Whipped cream. You say that the carbohydrate content is <<4>>.
 Item: Bell pepper. You say that the carbohydrate content is <<3>>.
 Item: Oat flakes. You say that the carbohydrate content is <<60>>.
 Item: Cookies. You say that the carbohydrate content is <<60>>.
-Item: Pear. You say that the carbohydrate content is <<15>>.";Food
-3xydkhwxmmdm;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Pear. You say that the carbohydrate content is <<15>>.",Food
+3xydkhwxmmdm,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -2386,8 +2386,8 @@ Item: Yogurt. You say that the carbohydrate content is <<45>>.
 Item: Couscous. You say that the carbohydrate content is <<65>>.
 Item: Gouda cheese. You say that the carbohydrate content is <<4>>.
 Item: Bread. You say that the carbohydrate content is <<65>>.
-Item: Chickpeas. You say that the carbohydrate content is <<20>>.";Food
-45v39tkqnh0b;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Chickpeas. You say that the carbohydrate content is <<20>>.",Food
+45v39tkqnh0b,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -2602,8 +2602,8 @@ Item: Proboscis monkey. You say that the carbohydrate content is <<450>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Spotted hyena. You say that the carbohydrate content is <<1500>>.
 Item: Kirk's dik-dik. You say that the carbohydrate content is <<100>>.
-Item: Stump-tailed macaque. You say that the carbohydrate content is <<980>>.";Food
-4exoqp2hez7x;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Stump-tailed macaque. You say that the carbohydrate content is <<980>>.",Food
+4exoqp2hez7x,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -2758,8 +2758,8 @@ Item: Pear. You say that the carbohydrate content is <<9>>.
 Item: Wrap. You say that the carbohydrate content is <<38>>.
 Item: Cauliflower. You say that the carbohydrate content is <<7>>.
 Item: Eggplant. You say that the carbohydrate content is <<8>>.
-Item: Chickpeas. You say that the carbohydrate content is <<16>>.";Food
-4n5e6nkj21xl;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Chickpeas. You say that the carbohydrate content is <<16>>.",Food
+4n5e6nkj21xl,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -2914,8 +2914,8 @@ Item: Syria. You say that the carbohydrate content is <<60>>.
 Item: Mongolia. You say that the carbohydrate content is <<70>>.
 Item: Cook Islands. You say that the carbohydrate content is <<70>>.
 Item: Maldives. You say that the carbohydrate content is <<75>>.
-Item: Chile. You say that the carbohydrate content is <<75>>.";Food
-4onztfuwyeet;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Chile. You say that the carbohydrate content is <<75>>.",Food
+4onztfuwyeet,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -3070,8 +3070,8 @@ Item: African bush elephant. You say that the carbohydrate content is <<4018>>.
 Item: Degu. You say that the carbohydrate content is <<152>>.
 Item: Quokka. You say that the carbohydrate content is <<152>>.
 Item: Quagga. You say that the carbohydrate content is <<670>>.
-Item: Least weasel. You say that the carbohydrate content is <<178>>.";Food
-5cbmft08cq03;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Least weasel. You say that the carbohydrate content is <<178>>.",Food
+5cbmft08cq03,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -3226,8 +3226,8 @@ Item: Gummy bears. You say that the carbohydrate content is <<77>>.
 Item: Iceberg lettuce. You say that the carbohydrate content is <<1>>.
 Item: Mozzarella. You say that the carbohydrate content is <<3>>.
 Item: Fried egg. You say that the carbohydrate content is <<5>>.
-Item: Beans. You say that the carbohydrate content is <<15>>.";Food
-5cib5ha5gyup;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Beans. You say that the carbohydrate content is <<15>>.",Food
+5cib5ha5gyup,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -3382,8 +3382,8 @@ Item: Dried ham. You say that the carbohydrate content is <<34>>.
 Item: Fried egg. You say that the carbohydrate content is <<16>>.
 Item: Raspberry. You say that the carbohydrate content is <<16>>.
 Item: Carrots. You say that the carbohydrate content is <<16>>.
-Item: Rigatoni. You say that the carbohydrate content is <<57>>.";Food
-5mutbqbcfxkj;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Rigatoni. You say that the carbohydrate content is <<57>>.",Food
+5mutbqbcfxkj,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -3550,8 +3550,8 @@ Item: Broccoli. You say that the carbohydrate content is <<30>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Spaghetti. You say that the carbohydrate content is <<28>>.
 Item: Salmon. You say that the carbohydrate content is <<16>>.
-Item: Chocolate cake. You say that the carbohydrate content is <<16>>.";Food
-5p4nqbumcod1;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Chocolate cake. You say that the carbohydrate content is <<16>>.",Food
+5p4nqbumcod1,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -3706,8 +3706,8 @@ Item: Jamaica. You say that the carbohydrate content is <<82>>.
 Item: San Marino. You say that the carbohydrate content is <<83>>.
 Item: Croatia. You say that the carbohydrate content is <<81>>.
 Item: El Salvador. You say that the carbohydrate content is <<76>>.
-Item: Nigeria. You say that the carbohydrate content is <<71>>.";Food
-5pcezz7727ha;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Nigeria. You say that the carbohydrate content is <<71>>.",Food
+5pcezz7727ha,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -3874,8 +3874,8 @@ Item: Pork. You say that the carbohydrate content is <<2>>.
 Item: Chocolate cake. You say that the carbohydrate content is <<34>>.
 Item: Walnuts. You say that the carbohydrate content is <<14>>.
 Item: Lentils. You say that the carbohydrate content is <<50>>.
-Item: White toast. You say that the carbohydrate content is <<75>>.";Food
-69o8no5c4w02;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: White toast. You say that the carbohydrate content is <<75>>.",Food
+69o8no5c4w02,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -4054,8 +4054,8 @@ Item: Nutella. You say that the carbohydrate content is <<57>>.
 Item: Dextrose. You say that the carbohydrate content is <<43>>.
 Item: Carrots. You say that the carbohydrate content is <<2>>.
 Item: Cheesecake. You say that the carbohydrate content is <<50>>.
-Item: Radishes. You say that the carbohydrate content is <<3>>.";Food
-6p84ypzofiiy;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Radishes. You say that the carbohydrate content is <<3>>.",Food
+6p84ypzofiiy,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -4210,8 +4210,8 @@ Item: Argentina. You say that the carbohydrate content is <<76.1>>.
 Item: Colombia. You say that the carbohydrate content is <<77.9>>.
 Item: Maldives. You say that the carbohydrate content is <<80.9>>.
 Item: Burkina Faso. You say that the carbohydrate content is <<59.8>>.
-Item: Vietnam. You say that the carbohydrate content is <<74.6>>.";Food
-6pjob01zppal;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Vietnam. You say that the carbohydrate content is <<74.6>>.",Food
+6pjob01zppal,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -4366,8 +4366,8 @@ Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Syria. You say that the carbohydrate content is <<76>>.
 Item: Trinidad and Tobago. You say that the carbohydrate content is <<76.5>>.
 Item: United States. You say that the carbohydrate content is <<89>>.
-Item: Egypt. You say that the carbohydrate content is <<71.8>>.";Food
-6wstjp4wezt4;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Egypt. You say that the carbohydrate content is <<71.8>>.",Food
+6wstjp4wezt4,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -4522,8 +4522,8 @@ Item: Quagga. You say that the carbohydrate content is <<900>>.
 Item: white-faced saki. You say that the carbohydrate content is <<500>>.
 Item: Asiatic elephant. You say that the carbohydrate content is <<4018>>.
 Item: Black lemur. You say that the carbohydrate content is <<1258>>.
-Item: Sugar glider. You say that the carbohydrate content is <<236>>.";Food
-794b9v70hot7;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Sugar glider. You say that the carbohydrate content is <<236>>.",Food
+794b9v70hot7,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -4678,8 +4678,8 @@ Item: Bread roll. You say that the carbohydrate content is <<34>>.
 Item: Cauliflower. You say that the carbohydrate content is <<45>>.
 Item: Bulgur. You say that the carbohydrate content is <<64>>.
 Item: Cookies. You say that the carbohydrate content is <<20>>.
-Item: Radishes. You say that the carbohydrate content is <<2>>.";Food
-7bagakupy07m;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Radishes. You say that the carbohydrate content is <<2>>.",Food
+7bagakupy07m,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -4834,8 +4834,8 @@ Item: India. You say that the carbohydrate content is <<75>>.
 Item: Ukraine. You say that the carbohydrate content is <<70>>.
 Item: Moldova. You say that the carbohydrate content is <<73>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
-Item: Suriname. You say that the carbohydrate content is <<75>>.";Food
-7k1k3a6issm1;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Suriname. You say that the carbohydrate content is <<75>>.",Food
+7k1k3a6issm1,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -4990,8 +4990,8 @@ Item: Egypt. You say that the carbohydrate content is <<78>>.
 Item: Tonga. You say that the carbohydrate content is <<75>>.
 Item: Brunei. You say that the carbohydrate content is <<74>>.
 Item: Guyana. You say that the carbohydrate content is <<73>>.
-Item: Nepal. You say that the carbohydrate content is <<75>>.";Food
-830wmzipl92b;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Nepal. You say that the carbohydrate content is <<75>>.",Food
+830wmzipl92b,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -5146,8 +5146,8 @@ Item: Ivory Coast. You say that the carbohydrate content is <<74>>.
 Item: Angola. You say that the carbohydrate content is <<70>>.
 Item: Ecuador. You say that the carbohydrate content is <<74>>.
 Item: Solomon Islands. You say that the carbohydrate content is <<77>>.
-Item: San Marino. You say that the carbohydrate content is <<75>>.";Food
-8f6bbs5a58p2;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: San Marino. You say that the carbohydrate content is <<75>>.",Food
+8f6bbs5a58p2,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -5302,8 +5302,8 @@ Item: Quagga. You say that the carbohydrate content is <<2100>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Bat-eared fox. You say that the carbohydrate content is <<560>>.
 Item: Midas tamarin. You say that the carbohydrate content is <<600>>.
-Item: Lesser Egyptian jerboa. You say that the carbohydrate content is <<180>>.";Food
-8pxa6oh4ylfk;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Lesser Egyptian jerboa. You say that the carbohydrate content is <<180>>.",Food
+8pxa6oh4ylfk,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -5458,8 +5458,8 @@ Item: Russia. You say that the carbohydrate content is <<80.5>>.
 Item: Solomon Islands. You say that the carbohydrate content is <<77.7>>.
 Item: Venezuela. You say that the carbohydrate content is <<77.5>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
-Item: France. You say that the carbohydrate content is <<83.7>>.";Food
-8w65x3973yxq;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: France. You say that the carbohydrate content is <<83.7>>.",Food
+8w65x3973yxq,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -5614,8 +5614,8 @@ Item: Kidney beans. You say that the carbohydrate content is <<3>>.
 Item: Dried ham. You say that the carbohydrate content is <<2>>.
 Item: Cheesecake. You say that the carbohydrate content is <<70>>.
 Item: Potatoes. You say that the carbohydrate content is <<70>>.
-Item: Peas. You say that the carbohydrate content is <<15>>.";Food
-8xds32cqrhlg;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Peas. You say that the carbohydrate content is <<15>>.",Food
+8xds32cqrhlg,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -5770,8 +5770,8 @@ Item: Nepal. You say that the carbohydrate content is <<69>>.
 Item: Brazil. You say that the carbohydrate content is <<79>>.
 Item: South Africa. You say that the carbohydrate content is <<68>>.
 Item: Chile. You say that the carbohydrate content is <<60>>.
-Item: Tanzania. You say that the carbohydrate content is <<60>>.";Food
-8xw3ufhwbsme;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Tanzania. You say that the carbohydrate content is <<60>>.",Food
+8xw3ufhwbsme,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -5926,8 +5926,8 @@ Item: China. You say that the carbohydrate content is <<85>>.
 Item: Argentina. You say that the carbohydrate content is <<79>>.
 Item: United Arab Emirates. You say that the carbohydrate content is <<70>>.
 Item: Venezuela. You say that the carbohydrate content is <<70>>.
-Item: Netherlands. You say that the carbohydrate content is <<80>>.";Food
-9g1zjvfjm5ie;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Netherlands. You say that the carbohydrate content is <<80>>.",Food
+9g1zjvfjm5ie,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -6142,8 +6142,8 @@ Item: Black lemur. You say that the carbohydrate content is <<550>>.
 Item: Bottlenosed dolphin. You say that the carbohydrate content is <<1200>>.
 Item: Tasmanian devil. You say that the carbohydrate content is <<230>>.
 Item: Llama. You say that the carbohydrate content is <<1200>>.
-Item: White-tufted-ear marmoset. You say that the carbohydrate content is <<550>>.";Food
-9oddgxwo9c9c;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: White-tufted-ear marmoset. You say that the carbohydrate content is <<550>>.",Food
+9oddgxwo9c9c,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -6298,8 +6298,8 @@ Item: Apple. You say that the carbohydrate content is <<4>>.
 Item: Raspberry. You say that the carbohydrate content is <<4>>.
 Item: Walnuts. You say that the carbohydrate content is <<4>>.
 Item: Raspberry jam. You say that the carbohydrate content is <<36>>.
-Item: Broccoli. You say that the carbohydrate content is <<4>>.";Food
-9ohtsd1826k8;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Broccoli. You say that the carbohydrate content is <<4>>.",Food
+9ohtsd1826k8,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -6454,8 +6454,8 @@ Item: Hippopotamus. You say that the carbohydrate content is <<1822>>.
 Item: Dugong. You say that the carbohydrate content is <<9092>>.
 Item: Midas tamarin. You say that the carbohydrate content is <<468>>.
 Item: Brush-tailed possum. You say that the carbohydrate content is <<296>>.
-Item: Orangutan. You say that the carbohydrate content is <<4018>>.";Food
-9y1vmy0rnmss;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Orangutan. You say that the carbohydrate content is <<4018>>.",Food
+9y1vmy0rnmss,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -6610,8 +6610,8 @@ Item: Pineapple. You say that the carbohydrate content is <<20>>.
 Item: Peanuts. You say that the carbohydrate content is <<60>>.
 Item: Mushrooms. You say that the carbohydrate content is <<1>>.
 Item: Whipped cream. You say that the carbohydrate content is <<35>>.
-Item: French fries. You say that the carbohydrate content is <<68>>.";Food
-9y9ydj97huhc;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: French fries. You say that the carbohydrate content is <<68>>.",Food
+9y9ydj97huhc,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -6778,8 +6778,8 @@ Item: African bush elephant. You say that the carbohydrate content is <<4018>>.
 Item: Wart hog. You say that the carbohydrate content is <<600>>.
 Item: Brazilian tapir. You say that the carbohydrate content is <<450>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
-Item: Siberian chipmunk. You say that the carbohydrate content is <<150>>.";Food
-a1yt5ymbgc4m;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Siberian chipmunk. You say that the carbohydrate content is <<150>>.",Food
+a1yt5ymbgc4m,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -6958,8 +6958,8 @@ Item: Burkina Faso. You say that the carbohydrate content is <<83>>.
 Item: Costa Rica. You say that the carbohydrate content is <<74>>.
 Item: Argentina. You say that the carbohydrate content is <<77>>.
 Item: Sao Tome and Principe. You say that the carbohydrate content is <<68>>.
-Item: Suriname. You say that the carbohydrate content is <<53>>.";Food
-a3eokjk1z75r;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Suriname. You say that the carbohydrate content is <<53>>.",Food
+a3eokjk1z75r,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -7138,8 +7138,8 @@ Item: Meerkat. You say that the carbohydrate content is <<250>>.
 Item: Degu. You say that the carbohydrate content is <<260>>.
 Item: African bush elephant. You say that the carbohydrate content is <<4090>>.
 Item: Spotted hyena. You say that the carbohydrate content is <<2070>>.
-Item: Siberian chipmunk. You say that the carbohydrate content is <<250>>.";Food
-ap09bdriiaxs;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Siberian chipmunk. You say that the carbohydrate content is <<250>>.",Food
+ap09bdriiaxs,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -7294,8 +7294,8 @@ Item: Argentina. You say that the carbohydrate content is <<71>>.
 Item: Uruguay. You say that the carbohydrate content is <<73>>.
 Item: United Arab Emirates. You say that the carbohydrate content is <<77>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
-Item: Haiti. You say that the carbohydrate content is <<68>>.";Food
-apzvrxiaap22;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Haiti. You say that the carbohydrate content is <<68>>.",Food
+apzvrxiaap22,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -7474,8 +7474,8 @@ Item: Central American spider monkey. You say that the carbohydrate content is <
 Item: Black lemur. You say that the carbohydrate content is <<900>>.
 Item: Lesser Egyptian jerboa. You say that the carbohydrate content is <<100>>.
 Item: Slender loris. You say that the carbohydrate content is <<380>>.
-Item: Western gray kangaroo. You say that the carbohydrate content is <<650>>.";Food
-bkehq8h4kqck;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Western gray kangaroo. You say that the carbohydrate content is <<650>>.",Food
+bkehq8h4kqck,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -7690,8 +7690,8 @@ Item: Rice cake. You say that the carbohydrate content is <<77>>.
 Item: Tomatoes. You say that the carbohydrate content is <<15>>.
 Item: French fries. You say that the carbohydrate content is <<80>>.
 Item: Lentils. You say that the carbohydrate content is <<30>>.
-Item: Chocolate cake. You say that the carbohydrate content is <<50>>.";Food
-bkl2178x4saf;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Chocolate cake. You say that the carbohydrate content is <<50>>.",Food
+bkl2178x4saf,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -7846,8 +7846,8 @@ Item: Leopard. You say that the carbohydrate content is <<730>>.
 Item: African buffalo. You say that the carbohydrate content is <<1475>>.
 Item: Degu. You say that the carbohydrate content is <<150>>.
 Item: Guereza. You say that the carbohydrate content is <<730>>.
-Item: Kirk's dik-dik. You say that the carbohydrate content is <<180>>.";Food
-bx2kflenfbbi;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Kirk's dik-dik. You say that the carbohydrate content is <<180>>.",Food
+bx2kflenfbbi,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -8062,8 +8062,8 @@ Item: European rabbit. You say that the carbohydrate content is <<500>>.
 Item: Dwarf mongoose. You say that the carbohydrate content is <<340>>.
 Item: Humpback whale. You say that the carbohydrate content is <<390>>.
 Item: African bush elephant. You say that the carbohydrate content is <<4000>>.
-Item: Stump-tailed macaque. You say that the carbohydrate content is <<1200>>.";Food
-ce75nokgote6;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Stump-tailed macaque. You say that the carbohydrate content is <<1200>>.",Food
+ce75nokgote6,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -8278,8 +8278,8 @@ Item: Mandarin. You say that the carbohydrate content is <<4>>.
 Item: Rice. You say that the carbohydrate content is <<60>>.
 Item: Mango. You say that the carbohydrate content is <<4>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
-Item: Bread. You say that the carbohydrate content is <<43>>.";Food
-ch1i36lf3gb1;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Bread. You say that the carbohydrate content is <<43>>.",Food
+ch1i36lf3gb1,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -8434,8 +8434,8 @@ Item: Lesser Egyptian jerboa. You say that the carbohydrate content is <<150>>.
 Item: Tiger. You say that the carbohydrate content is <<1260>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Leopard. You say that the carbohydrate content is <<1200>>.
-Item: Naked mole-rat. You say that the carbohydrate content is <<250>>.";Food
-chp46vl70814;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Naked mole-rat. You say that the carbohydrate content is <<250>>.",Food
+chp46vl70814,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -8590,8 +8590,8 @@ Item: Eurasian red squirrel. You say that the carbohydrate content is <<280>>.
 Item: Slender loris. You say that the carbohydrate content is <<380>>.
 Item: Degu. You say that the carbohydrate content is <<200>>.
 Item: Australian tiger cat. You say that the carbohydrate content is <<350>>.
-Item: Siberian chipmunk. You say that the carbohydrate content is <<230>>.";Food
-cpgixk1g8s99;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Siberian chipmunk. You say that the carbohydrate content is <<230>>.",Food
+cpgixk1g8s99,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -8794,8 +8794,8 @@ Item: Dromedary. You say that the carbohydrate content is <<2543>>.
 Item: Leopard. You say that the carbohydrate content is <<1500>>.
 Item: Humpback whale. You say that the carbohydrate content is <<4000>>.
 Item: Japanese macaque. You say that the carbohydrate content is <<530>>.
-Item: Common raccoon. You say that the carbohydrate content is <<345>>.";Food
-cu4jzug5dshc;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Common raccoon. You say that the carbohydrate content is <<345>>.",Food
+cu4jzug5dshc,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -8950,8 +8950,8 @@ Item: Democratic Republic of the Congo. You say that the carbohydrate content is
 Item: Yemen. You say that the carbohydrate content is <<68>>.
 Item: Cook Islands. You say that the carbohydrate content is <<71>>.
 Item: Iran. You say that the carbohydrate content is <<76>>.
-Item: Syria. You say that the carbohydrate content is <<71>>.";Food
-d363es3nvfvq;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Syria. You say that the carbohydrate content is <<71>>.",Food
+d363es3nvfvq,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -9166,8 +9166,8 @@ Item: African buffalo. You say that the carbohydrate content is <<1400>>.
 Item: Black lemur. You say that the carbohydrate content is <<300>>.
 Item: Degu. You say that the carbohydrate content is <<50>>.
 Item: Tufted capu. You say that the carbohydrate content is <<1100>>.
-Item: Meerkat. You say that the carbohydrate content is <<230>>.";Food
-dlan9mr2iku8;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Meerkat. You say that the carbohydrate content is <<230>>.",Food
+dlan9mr2iku8,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -9322,8 +9322,8 @@ Item: Cuba. You say that the carbohydrate content is <<75>>.
 Item: Iceland. You say that the carbohydrate content is <<80>>.
 Item: Serbia. You say that the carbohydrate content is <<77>>.
 Item: Costa Rica. You say that the carbohydrate content is <<78>>.
-Item: Ecuador. You say that the carbohydrate content is <<78>>.";Food
-dm6c9jbelxv7;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Ecuador. You say that the carbohydrate content is <<78>>.",Food
+dm6c9jbelxv7,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -9478,8 +9478,8 @@ Item: Dromedary. You say that the carbohydrate content is <<1743>>.
 Item: Mule deer. You say that the carbohydrate content is <<540>>.
 Item: Bottlenosed dolphin. You say that the carbohydrate content is <<2896>>.
 Item: Tasmanian devil. You say that the carbohydrate content is <<854>>.
-Item: Japanese macaque. You say that the carbohydrate content is <<850>>.";Food
-dp0g9nbjr8wo;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Japanese macaque. You say that the carbohydrate content is <<850>>.",Food
+dp0g9nbjr8wo,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -9694,8 +9694,8 @@ Item: White-tufted-ear marmoset. You say that the carbohydrate content is <<800>
 Item: Australian tiger cat. You say that the carbohydrate content is <<300>>.
 Item: Siberian chipmunk. You say that the carbohydrate content is <<400>>.
 Item: Western gray kangaroo. You say that the carbohydrate content is <<670>>.
-Item: Nutria. You say that the carbohydrate content is <<152>>.";Food
-drqmw5inbe0l;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Nutria. You say that the carbohydrate content is <<152>>.",Food
+drqmw5inbe0l,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -9910,8 +9910,8 @@ Item: Pineapple. You say that the carbohydrate content is <<2>>.
 Item: Nutella. You say that the carbohydrate content is <<8>>.
 Item: Mandarin. You say that the carbohydrate content is <<3>>.
 Item: Dried ham. You say that the carbohydrate content is <<21>>.
-Item: Gummy bears. You say that the carbohydrate content is <<77>>.";Food
-efuhrzbhjnwg;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Gummy bears. You say that the carbohydrate content is <<77>>.",Food
+efuhrzbhjnwg,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -10066,8 +10066,8 @@ Item: Iran. You say that the carbohydrate content is <<75>>.
 Item: Uruguay. You say that the carbohydrate content is <<78>>.
 Item: Libya. You say that the carbohydrate content is <<69>>.
 Item: Marshall Islands. You say that the carbohydrate content is <<75>>.
-Item: Egypt. You say that the carbohydrate content is <<72>>.";Food
-ev2fnz9nxtx2;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Egypt. You say that the carbohydrate content is <<72>>.",Food
+ev2fnz9nxtx2,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -10222,8 +10222,8 @@ Item: Tuvalu. You say that the carbohydrate content is <<69>>.
 Item: Vatican City. You say that the carbohydrate content is <<78>>.
 Item: Canada. You say that the carbohydrate content is <<81>>.
 Item: Germany. You say that the carbohydrate content is <<78>>.
-Item: China. You say that the carbohydrate content is <<67>>.";Food
-exre9dksey03;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: China. You say that the carbohydrate content is <<67>>.",Food
+exre9dksey03,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -10402,8 +10402,8 @@ Item: Black lemur. You say that the carbohydrate content is <<380>>.
 Item: Australian tiger cat. You say that the carbohydrate content is <<152>>.
 Item: Least weasel. You say that the carbohydrate content is <<236>>.
 Item: Midas tamarin. You say that the carbohydrate content is <<550>>.
-Item: African bush elephant. You say that the carbohydrate content is <<4018>>.";Food
-f52y9ezjwc9h;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: African bush elephant. You say that the carbohydrate content is <<4018>>.",Food
+f52y9ezjwc9h,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -10558,8 +10558,8 @@ Item: Serbia. You say that the carbohydrate content is <<76.4>>.
 Item: South Africa. You say that the carbohydrate content is <<64.1>>.
 Item: China. You say that the carbohydrate content is <<77.1>>.
 Item: Democratic Republic of the Congo. You say that the carbohydrate content is <<69.3>>.
-Item: San Marino. You say that the carbohydrate content is <<83.4>>.";Food
-f7wkplh1kr5z;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: San Marino. You say that the carbohydrate content is <<83.4>>.",Food
+f7wkplh1kr5z,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -10714,8 +10714,8 @@ Item: Cuba. You say that the carbohydrate content is <<78>>.
 Item: Costa Rica. You say that the carbohydrate content is <<78>>.
 Item: Serbia. You say that the carbohydrate content is <<70>>.
 Item: Russia. You say that the carbohydrate content is <<80.5>>.
-Item: India. You say that the carbohydrate content is <<78>>.";Food
-gmz56it2g8ek;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: India. You say that the carbohydrate content is <<78>>.",Food
+gmz56it2g8ek,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -10870,8 +10870,8 @@ Item: Feta. You say that the carbohydrate content is <<30>>.
 Item: Beans. You say that the carbohydrate content is <<10>>.
 Item: Croissant. You say that the carbohydrate content is <<30>>.
 Item: Vienna sausages. You say that the carbohydrate content is <<7>>.
-Item: Basketball. You say that the carbohydrate content is <<999>>.";Food
-hpajcjzog48v;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Basketball. You say that the carbohydrate content is <<999>>.",Food
+hpajcjzog48v,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -11026,8 +11026,8 @@ Item: Uruguay. You say that the carbohydrate content is <<76.5>>.
 Item: Nepal. You say that the carbohydrate content is <<65>>.
 Item: United Arab Emirates. You say that the carbohydrate content is <<80>>.
 Item: Mongolia. You say that the carbohydrate content is <<70.1>>.
-Item: Yemen. You say that the carbohydrate content is <<70>>.";Food
-hs7xjpxwqzoz;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Yemen. You say that the carbohydrate content is <<70>>.",Food
+hs7xjpxwqzoz,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -11206,8 +11206,8 @@ Item: Bulgur. You say that the carbohydrate content is <<77>>.
 Item: Potatoes. You say that the carbohydrate content is <<77>>.
 Item: Fried egg. You say that the carbohydrate content is <<8>>.
 Item: Eggplant. You say that the carbohydrate content is <<16>>.
-Item: Apple turnover. You say that the carbohydrate content is <<34>>.";Food
-hsb8a87w94ei;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Apple turnover. You say that the carbohydrate content is <<34>>.",Food
+hsb8a87w94ei,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -11362,8 +11362,8 @@ Item: Wrap. You say that the carbohydrate content is <<40>>.
 Item: Bread. You say that the carbohydrate content is <<40>>.
 Item: Cheesecake. You say that the carbohydrate content is <<20>>.
 Item: Walnuts. You say that the carbohydrate content is <<4>>.
-Item: Mushrooms. You say that the carbohydrate content is <<1>>.";Food
-hzeafke8f5ke;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Mushrooms. You say that the carbohydrate content is <<1>>.",Food
+hzeafke8f5ke,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -11578,8 +11578,8 @@ Item: White-tufted-ear marmoset. You say that the carbohydrate content is <<186>
 Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Orangutan. You say that the carbohydrate content is <<2408>>.
 Item: Brown lemur. You say that the carbohydrate content is <<254>>.
-Item: Degu. You say that the carbohydrate content is <<132>>.";Food
-i636fcg5x0fy;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Degu. You say that the carbohydrate content is <<132>>.",Food
+i636fcg5x0fy,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -11734,8 +11734,8 @@ Item: Dried ham. You say that the carbohydrate content is <<18>>.
 Item: Bell pepper. You say that the carbohydrate content is <<3>>.
 Item: Gouda cheese. You say that the carbohydrate content is <<54>>.
 Item: Raspberry jam. You say that the carbohydrate content is <<77>>.
-Item: Pork. You say that the carbohydrate content is <<3>>.";Food
-i6xr02yzsoee;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Pork. You say that the carbohydrate content is <<3>>.",Food
+i6xr02yzsoee,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -11890,8 +11890,8 @@ Item: Benin. You say that the carbohydrate content is <<71>>.
 Item: Guyana. You say that the carbohydrate content is <<70.3>>.
 Item: Vatican City. You say that the carbohydrate content is <<80>>.
 Item: Cuba. You say that the carbohydrate content is <<77.7>>.
-Item: Brazil. You say that the carbohydrate content is <<78>>.";Food
-j4tufliz4ct6;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Brazil. You say that the carbohydrate content is <<78>>.",Food
+j4tufliz4ct6,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -12046,8 +12046,8 @@ Item: Cucumber. You say that the carbohydrate content is <<1>>.
 Item: Fish sticks. You say that the carbohydrate content is <<15>>.
 Item: Chips. You say that the carbohydrate content is <<75>>.
 Item: Pineapple. You say that the carbohydrate content is <<3>>.
-Item: Cauliflower. You say that the carbohydrate content is <<2>>.";Food
-j76opfa4wjzj;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Cauliflower. You say that the carbohydrate content is <<2>>.",Food
+j76opfa4wjzj,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -12202,8 +12202,8 @@ Item: Seychelles. You say that the carbohydrate content is <<73>>.
 Item: Tanzania. You say that the carbohydrate content is <<69>>.
 Item: Saint Kitts and Nevis. You say that the carbohydrate content is <<77>>.
 Item: Haiti. You say that the carbohydrate content is <<75>>.
-Item: Basketball. You say that the carbohydrate content is <<999>>.";Food
-jlx0jreulovy;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Basketball. You say that the carbohydrate content is <<999>>.",Food
+jlx0jreulovy,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -12358,8 +12358,8 @@ Item: Nigeria. You say that the carbohydrate content is <<54>>.
 Item: Germany. You say that the carbohydrate content is <<80>>.
 Item: China. You say that the carbohydrate content is <<83>>.
 Item: Democratic Republic of the Congo. You say that the carbohydrate content is <<57>>.
-Item: Australia. You say that the carbohydrate content is <<81>>.";Food
-jpx3htsbrf1n;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Australia. You say that the carbohydrate content is <<81>>.",Food
+jpx3htsbrf1n,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -12514,8 +12514,8 @@ Item: Red panda. You say that the carbohydrate content is <<550>>.
 Item: White-tufted-ear marmoset. You say that the carbohydrate content is <<360>>.
 Item: Bat-eared fox. You say that the carbohydrate content is <<420>>.
 Item: Degu. You say that the carbohydrate content is <<180>>.
-Item: Ibex. You say that the carbohydrate content is <<1360>>.";Food
-jxoeol64n5hz;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Ibex. You say that the carbohydrate content is <<1360>>.",Food
+jxoeol64n5hz,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -12670,8 +12670,8 @@ Item: Cookies. You say that the carbohydrate content is <<46>>.
 Item: Rice cake. You say that the carbohydrate content is <<77>>.
 Item: Pear. You say that the carbohydrate content is <<3>>.
 Item: Bread. You say that the carbohydrate content is <<24>>.
-Item: Banana. You say that the carbohydrate content is <<8>>.";Food
-k5d1wxxqlmni;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Banana. You say that the carbohydrate content is <<8>>.",Food
+k5d1wxxqlmni,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -12826,8 +12826,8 @@ Item: Sao Tome and Principe. You say that the carbohydrate content is <<68>>.
 Item: Lesotho. You say that the carbohydrate content is <<60>>.
 Item: South Africa. You say that the carbohydrate content is <<56>>.
 Item: Solomon Islands. You say that the carbohydrate content is <<70>>.
-Item: Maldives. You say that the carbohydrate content is <<78>>.";Food
-kesc2p7oa7me;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Maldives. You say that the carbohydrate content is <<78>>.",Food
+kesc2p7oa7me,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -12982,8 +12982,8 @@ Item: Greece. You say that the carbohydrate content is <<83>>.
 Item: Costa Rica. You say that the carbohydrate content is <<85>>.
 Item: United States. You say that the carbohydrate content is <<80>>.
 Item: Benin. You say that the carbohydrate content is <<75>>.
-Item: Vatican City. You say that the carbohydrate content is <<80>>.";Food
-kiz0e74wvrz6;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Vatican City. You say that the carbohydrate content is <<80>>.",Food
+kiz0e74wvrz6,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -13150,8 +13150,8 @@ Item: Apple turnover. You say that the carbohydrate content is <<34>>.
 Item: Bread roll. You say that the carbohydrate content is <<34>>.
 Item: Cheesecake. You say that the carbohydrate content is <<47>>.
 Item: Peas. You say that the carbohydrate content is <<16>>.
-Item: Mozzarella. You say that the carbohydrate content is <<47>>.";Food
-kp76hw01z3b2;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Mozzarella. You say that the carbohydrate content is <<47>>.",Food
+kp76hw01z3b2,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -13306,8 +13306,8 @@ Item: Moldova. You say that the carbohydrate content is <<78>>.
 Item: Ivory Coast. You say that the carbohydrate content is <<75>>.
 Item: United Arab Emirates. You say that the carbohydrate content is <<80>>.
 Item: Egypt. You say that the carbohydrate content is <<71.8>>.
-Item: Tanzania. You say that the carbohydrate content is <<78>>.";Food
-l8ezhyyp325m;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Tanzania. You say that the carbohydrate content is <<78>>.",Food
+l8ezhyyp325m,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -13474,8 +13474,8 @@ Item: Chicken. You say that the carbohydrate content is <<25>>.
 Item: Yogurt. You say that the carbohydrate content is <<35>>.
 Item: Tuna (canned). You say that the carbohydrate content is <<55>>.
 Item: Peanuts. You say that the carbohydrate content is <<45>>.
-Item: Pork. You say that the carbohydrate content is <<55>>.";Food
-lhm6c5m9odj9;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Pork. You say that the carbohydrate content is <<55>>.",Food
+lhm6c5m9odj9,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -13630,8 +13630,8 @@ Item: Shrimps. You say that the carbohydrate content is <<23>>.
 Item: Broccoli. You say that the carbohydrate content is <<13>>.
 Item: Spaghetti. You say that the carbohydrate content is <<28>>.
 Item: Walnuts. You say that the carbohydrate content is <<4>>.
-Item: Fish sticks. You say that the carbohydrate content is <<31>>.";Food
-lqga75g2fj41;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Fish sticks. You say that the carbohydrate content is <<31>>.",Food
+lqga75g2fj41,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -13786,8 +13786,8 @@ Item: Tomatoes. You say that the carbohydrate content is <<8>>.
 Item: Vanilla pudding. You say that the carbohydrate content is <<15>>.
 Item: Couscous. You say that the carbohydrate content is <<12>>.
 Item: Salami. You say that the carbohydrate content is <<12>>.
-Item: Croissant. You say that the carbohydrate content is <<35>>.";Food
-luaevzlbbjwo;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Croissant. You say that the carbohydrate content is <<35>>.",Food
+luaevzlbbjwo,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -14002,8 +14002,8 @@ Item: Lentils. You say that the carbohydrate content is <<34>>.
 Item: Pear. You say that the carbohydrate content is <<65>>.
 Item: Spaghetti. You say that the carbohydrate content is <<28>>.
 Item: Peas. You say that the carbohydrate content is <<45>>.
-Item: Grapes. You say that the carbohydrate content is <<23>>.";Food
-m7iifwqavf3f;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Grapes. You say that the carbohydrate content is <<23>>.",Food
+m7iifwqavf3f,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -14158,8 +14158,8 @@ Item: Hippopotamus. You say that the carbohydrate content is <<2900>>.
 Item: Naked mole-rat. You say that the carbohydrate content is <<22>>.
 Item: African wild dog. You say that the carbohydrate content is <<650>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
-Item: Chimpanzee. You say that the carbohydrate content is <<1600>>.";Food
-mcvs1zmkool3;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Chimpanzee. You say that the carbohydrate content is <<1600>>.",Food
+mcvs1zmkool3,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -14314,8 +14314,8 @@ Item: Curd cheese. You say that the carbohydrate content is <<63>>.
 Item: Cream cheese. You say that the carbohydrate content is <<68>>.
 Item: Strawberry. You say that the carbohydrate content is <<5>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
-Item: Vegetarian salami. You say that the carbohydrate content is <<36>>.";Food
-mo6b50e8cl78;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Vegetarian salami. You say that the carbohydrate content is <<36>>.",Food
+mo6b50e8cl78,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -14518,8 +14518,8 @@ Item: Raccoon dog. You say that the carbohydrate content is <<900>>.
 Item: Short-beaked echidna. You say that the carbohydrate content is <<700>>.
 Item: Spotted hyena. You say that the carbohydrate content is <<1000>>.
 Item: Midas tamarin. You say that the carbohydrate content is <<500>>.
-Item: Mountain hare. You say that the carbohydrate content is <<260>>.";Food
-mq9p1a54t26w;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Mountain hare. You say that the carbohydrate content is <<260>>.",Food
+mq9p1a54t26w,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -14686,8 +14686,8 @@ Item: Chile. You say that the carbohydrate content is <<65>>.
 Item: Ecuador. You say that the carbohydrate content is <<64>>.
 Item: Tuvalu. You say that the carbohydrate content is <<62>>.
 Item: Angola. You say that the carbohydrate content is <<59>>.
-Item: Saint Lucia. You say that the carbohydrate content is <<65>>.";Food
-mr8c5sfjy7bc;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Saint Lucia. You say that the carbohydrate content is <<65>>.",Food
+mr8c5sfjy7bc,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -14842,8 +14842,8 @@ Item: Koala. You say that the carbohydrate content is <<357>>.
 Item: Least weasel. You say that the carbohydrate content is <<350>>.
 Item: Lion. You say that the carbohydrate content is <<1245>>.
 Item: Sea otter. You say that the carbohydrate content is <<458>>.
-Item: Meerkat. You say that the carbohydrate content is <<346>>.";Food
-mrb0s0ckbda9;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Meerkat. You say that the carbohydrate content is <<346>>.",Food
+mrb0s0ckbda9,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -14998,8 +14998,8 @@ Item: Tasmanian devil. You say that the carbohydrate content is <<543>>.
 Item: African wild dog. You say that the carbohydrate content is <<324>>.
 Item: Tufted capu. You say that the carbohydrate content is <<654>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
-Item: Wild boar. You say that the carbohydrate content is <<432>>.";Food
-munr1sh9ezc8;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Wild boar. You say that the carbohydrate content is <<432>>.",Food
+munr1sh9ezc8,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -15154,8 +15154,8 @@ Item: Iceland. You say that the carbohydrate content is <<85>>.
 Item: Vatican City. You say that the carbohydrate content is <<80>>.
 Item: Haiti. You say that the carbohydrate content is <<59>>.
 Item: United States. You say that the carbohydrate content is <<78>>.
-Item: United Arab Emirates. You say that the carbohydrate content is <<81>>.";Food
-n11xewpgbxj4;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: United Arab Emirates. You say that the carbohydrate content is <<81>>.",Food
+n11xewpgbxj4,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -15346,8 +15346,8 @@ Item: Venezuela. You say that the carbohydrate content is <<70>>.
 Item: Democratic Republic of the Congo. You say that the carbohydrate content is <<70>>.
 Item: Cuba. You say that the carbohydrate content is <<77>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
-Item: Ukraine. You say that the carbohydrate content is <<69>>.";Food
-nfd8u3q7kdlu;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Ukraine. You say that the carbohydrate content is <<69>>.",Food
+nfd8u3q7kdlu,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -15502,8 +15502,8 @@ Item: Nigeria. You say that the carbohydrate content is <<54.5>>.
 Item: Seychelles. You say that the carbohydrate content is <<78>>.
 Item: Saint Vincent and the Grenadines. You say that the carbohydrate content is <<77>>.
 Item: Venezuela. You say that the carbohydrate content is <<76>>.
-Item: Ethiopia. You say that the carbohydrate content is <<67>>.";Food
-nkfzm8e0mtcu;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Ethiopia. You say that the carbohydrate content is <<67>>.",Food
+nkfzm8e0mtcu,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -15658,8 +15658,8 @@ Item: Guyana. You say that the carbohydrate content is <<78>>.
 Item: Syria. You say that the carbohydrate content is <<56>>.
 Item: Iceland. You say that the carbohydrate content is <<88>>.
 Item: Nepal. You say that the carbohydrate content is <<64>>.
-Item: Libya. You say that the carbohydrate content is <<71>>.";Food
-nvvgggjd4479;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Libya. You say that the carbohydrate content is <<71>>.",Food
+nvvgggjd4479,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -15862,8 +15862,8 @@ Item: Chocolate cake. You say that the carbohydrate content is <<56>>.
 Item: Lentils. You say that the carbohydrate content is <<56>>.
 Item: Chickpeas. You say that the carbohydrate content is <<46>>.
 Item: Cream cheese. You say that the carbohydrate content is <<54>>.
-Item: Beans. You say that the carbohydrate content is <<54>>.";Food
-nxibx285n3rn;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Beans. You say that the carbohydrate content is <<54>>.",Food
+nxibx285n3rn,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -16018,8 +16018,8 @@ Item: Mongolia. You say that the carbohydrate content is <<72>>.
 Item: Taiwan. You say that the carbohydrate content is <<70>>.
 Item: El Salvador. You say that the carbohydrate content is <<70>>.
 Item: South Africa. You say that the carbohydrate content is <<67>>.
-Item: Paraguay. You say that the carbohydrate content is <<66>>.";Food
-ny6bqxvzzhx5;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Paraguay. You say that the carbohydrate content is <<66>>.",Food
+ny6bqxvzzhx5,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -16186,8 +16186,8 @@ Item: Wrap. You say that the carbohydrate content is <<77>>.
 Item: Feta. You say that the carbohydrate content is <<15>>.
 Item: Cream cheese. You say that the carbohydrate content is <<4>>.
 Item: Bread. You say that the carbohydrate content is <<50>>.
-Item: Broccoli. You say that the carbohydrate content is <<18>>.";Food
-nyo8d8p2ok0i;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Broccoli. You say that the carbohydrate content is <<18>>.",Food
+nyo8d8p2ok0i,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -16342,8 +16342,8 @@ Item: Mandarin. You say that the carbohydrate content is <<40>>.
 Item: Eggplant. You say that the carbohydrate content is <<10>>.
 Item: Feta. You say that the carbohydrate content is <<40>>.
 Item: Lentils. You say that the carbohydrate content is <<50>>.
-Item: Rice. You say that the carbohydrate content is <<60>>.";Food
-oi136bu0srj9;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Rice. You say that the carbohydrate content is <<60>>.",Food
+oi136bu0srj9,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -16498,8 +16498,8 @@ Item: Nepal. You say that the carbohydrate content is <<77>>.
 Item: Ecuador. You say that the carbohydrate content is <<81>>.
 Item: Angola. You say that the carbohydrate content is <<74>>.
 Item: Croatia. You say that the carbohydrate content is <<82>>.
-Item: Burkina Faso. You say that the carbohydrate content is <<71>>.";Food
-oiytkamz9b68;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Burkina Faso. You say that the carbohydrate content is <<71>>.",Food
+oiytkamz9b68,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -16690,8 +16690,8 @@ Item: Dried ham. You say that the carbohydrate content is <<50>>.
 Item: Bulgur. You say that the carbohydrate content is <<50>>.
 Item: Cauliflower. You say that the carbohydrate content is <<15>>.
 Item: Chips. You say that the carbohydrate content is <<65>>.
-Item: Basketball. You say that the carbohydrate content is <<999>>.";Food
-okeobbnlodto;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Basketball. You say that the carbohydrate content is <<999>>.",Food
+okeobbnlodto,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -16846,8 +16846,8 @@ Item: Nauru. You say that the carbohydrate content is <<75>>.
 Item: Cook Islands. You say that the carbohydrate content is <<73>>.
 Item: Chile. You say that the carbohydrate content is <<82>>.
 Item: Tonga. You say that the carbohydrate content is <<67>>.
-Item: Mexico. You say that the carbohydrate content is <<86>>.";Food
-oszy5gk8fkit;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Mexico. You say that the carbohydrate content is <<86>>.",Food
+oszy5gk8fkit,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -17002,8 +17002,8 @@ Item: Degu. You say that the carbohydrate content is <<164>>.
 Item: European rabbit. You say that the carbohydrate content is <<178>>.
 Item: Quagga. You say that the carbohydrate content is <<1368>>.
 Item: Sea otter. You say that the carbohydrate content is <<678>>.
-Item: African bush elephant. You say that the carbohydrate content is <<4018>>.";Food
-ovd5s5i79kru;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: African bush elephant. You say that the carbohydrate content is <<4018>>.",Food
+ovd5s5i79kru,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -17158,8 +17158,8 @@ Item: Libya. You say that the carbohydrate content is <<70.4>>.
 Item: Guinea-Bissau. You say that the carbohydrate content is <<76.8>>.
 Item: Bhutan. You say that the carbohydrate content is <<78.4>>.
 Item: El Salvador. You say that the carbohydrate content is <<78.3>>.
-Item: Costa Rica. You say that the carbohydrate content is <<81>>.";Food
-p1zg6qqoufvv;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Costa Rica. You say that the carbohydrate content is <<81>>.",Food
+p1zg6qqoufvv,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -17314,8 +17314,8 @@ Item: Taiwan. You say that the carbohydrate content is <<77>>.
 Item: Iran. You say that the carbohydrate content is <<69>>.
 Item: Cuba. You say that the carbohydrate content is <<71>>.
 Item: Guinea-Bissau. You say that the carbohydrate content is <<74>>.
-Item: Bolivia. You say that the carbohydrate content is <<72>>.";Food
-p4km3aw4hdmt;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Bolivia. You say that the carbohydrate content is <<72>>.",Food
+p4km3aw4hdmt,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -17470,8 +17470,8 @@ Item: Tasmanian devil. You say that the carbohydrate content is <<200>>.
 Item: De Brazza's monkey. You say that the carbohydrate content is <<700>>.
 Item: Gray wolf. You say that the carbohydrate content is <<500>>.
 Item: Ibex. You say that the carbohydrate content is <<900>>.
-Item: Basketball. You say that the carbohydrate content is <<999>>.";Food
-p8j3krfjtc18;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Basketball. You say that the carbohydrate content is <<999>>.",Food
+p8j3krfjtc18,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -17686,8 +17686,8 @@ Item: Slender loris. You say that the carbohydrate content is <<380>>.
 Item: Cheetah. You say that the carbohydrate content is <<1115>>.
 Item: Common raccoon. You say that the carbohydrate content is <<735>>.
 Item: Least weasel. You say that the carbohydrate content is <<426>>.
-Item: White-tufted-ear marmoset. You say that the carbohydrate content is <<523>>.";Food
-pq5u101ioebi;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: White-tufted-ear marmoset. You say that the carbohydrate content is <<523>>.",Food
+pq5u101ioebi,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -17902,8 +17902,8 @@ Item: Sea otter. You say that the carbohydrate content is <<550>>.
 Item: Gray wolf. You say that the carbohydrate content is <<1100>>.
 Item: Spotted hyena. You say that the carbohydrate content is <<1200>>.
 Item: Midas tamarin. You say that the carbohydrate content is <<450>>.
-Item: Tufted capu. You say that the carbohydrate content is <<1100>>.";Food
-puwl4gv8w7xv;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Tufted capu. You say that the carbohydrate content is <<1100>>.",Food
+puwl4gv8w7xv,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -18058,8 +18058,8 @@ Item: French fries. You say that the carbohydrate content is <<30>>.
 Item: Gummy bears. You say that the carbohydrate content is <<77>>.
 Item: Apricot. You say that the carbohydrate content is <<12>>.
 Item: Corn. You say that the carbohydrate content is <<11>>.
-Item: Cherry jam. You say that the carbohydrate content is <<12>>.";Food
-qza2yw7qkddd;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Cherry jam. You say that the carbohydrate content is <<12>>.",Food
+qza2yw7qkddd,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -18214,8 +18214,8 @@ Item: Wrap. You say that the carbohydrate content is <<45>>.
 Item: Cheesecake. You say that the carbohydrate content is <<77>>.
 Item: Nutella. You say that the carbohydrate content is <<57>>.
 Item: Fish sticks. You say that the carbohydrate content is <<2>>.
-Item: Apple. You say that the carbohydrate content is <<9>>.";Food
-rixs8hohxtip;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Apple. You say that the carbohydrate content is <<9>>.",Food
+rixs8hohxtip,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -18430,8 +18430,8 @@ Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Ring-tailed lemur. You say that the carbohydrate content is <<680>>.
 Item: Guinea pig. You say that the carbohydrate content is <<320>>.
 Item: Polar bear. You say that the carbohydrate content is <<2600>>.
-Item: European rabbit. You say that the carbohydrate content is <<360>>.";Food
-rj8dmpyn2563;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: European rabbit. You say that the carbohydrate content is <<360>>.",Food
+rj8dmpyn2563,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -18586,8 +18586,8 @@ Item: Tuvalu. You say that the carbohydrate content is <<70>>.
 Item: Netherlands. You say that the carbohydrate content is <<80>>.
 Item: Cuba. You say that the carbohydrate content is <<68>>.
 Item: Niue. You say that the carbohydrate content is <<70>>.
-Item: Benin. You say that the carbohydrate content is <<71>>.";Food
-rsulb3mqq6p4;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Benin. You say that the carbohydrate content is <<71>>.",Food
+rsulb3mqq6p4,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -18742,8 +18742,8 @@ Item: Tasmanian devil. You say that the carbohydrate content is <<21>>.
 Item: Proboscis monkey. You say that the carbohydrate content is <<166>>.
 Item: Giraffe. You say that the carbohydrate content is <<450>>.
 Item: Sea otter. You say that the carbohydrate content is <<567>>.
-Item: Horse. You say that the carbohydrate content is <<320>>.";Food
-s1u4m0v2txtl;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Horse. You say that the carbohydrate content is <<320>>.",Food
+s1u4m0v2txtl,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -18934,8 +18934,8 @@ Item: Vienna sausages. You say that the carbohydrate content is <<18>>.
 Item: Bulgur. You say that the carbohydrate content is <<60>>.
 Item: White toast. You say that the carbohydrate content is <<67>>.
 Item: Tomatoes. You say that the carbohydrate content is <<20>>.
-Item: Cream cheese. You say that the carbohydrate content is <<43>>.";Food
-s2edlrqnhaz8;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Cream cheese. You say that the carbohydrate content is <<43>>.",Food
+s2edlrqnhaz8,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -19150,8 +19150,8 @@ Item: Koala. You say that the carbohydrate content is <<1200>>.
 Item: Guinea pig. You say that the carbohydrate content is <<340>>.
 Item: Dwarf mongoose. You say that the carbohydrate content is <<250>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
-Item: Eurasian red squirrel. You say that the carbohydrate content is <<296>>.";Food
-s8hbr6g15kfh;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Eurasian red squirrel. You say that the carbohydrate content is <<296>>.",Food
+s8hbr6g15kfh,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -19366,8 +19366,8 @@ Item: Guinea pig. You say that the carbohydrate content is <<250>>.
 Item: Lesser Egyptian jerboa. You say that the carbohydrate content is <<150>>.
 Item: Steller sea lion. You say that the carbohydrate content is <<2000>>.
 Item: Lion. You say that the carbohydrate content is <<2050>>.
-Item: Gray wolf. You say that the carbohydrate content is <<1200>>.";Food
-sbydcgc89frj;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Gray wolf. You say that the carbohydrate content is <<1200>>.",Food
+sbydcgc89frj,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -19522,8 +19522,8 @@ Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Mongolia. You say that the carbohydrate content is <<78>>.
 Item: Saint Vincent and the Grenadines. You say that the carbohydrate content is <<80>>.
 Item: Saint Lucia. You say that the carbohydrate content is <<75>>.
-Item: Burkina Faso. You say that the carbohydrate content is <<73>>.";Food
-scj4c0vnxtir;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Burkina Faso. You say that the carbohydrate content is <<73>>.",Food
+scj4c0vnxtir,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -19678,8 +19678,8 @@ Item: Carrots. You say that the carbohydrate content is <<4>>.
 Item: Cucumber. You say that the carbohydrate content is <<6>>.
 Item: Whipped cream. You say that the carbohydrate content is <<77>>.
 Item: Bulgur. You say that the carbohydrate content is <<77>>.
-Item: Curd cheese. You say that the carbohydrate content is <<5>>.";Food
-svdxe9n1f3ku;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Curd cheese. You say that the carbohydrate content is <<5>>.",Food
+svdxe9n1f3ku,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -19834,8 +19834,8 @@ Item: Colombia. You say that the carbohydrate content is <<77.9>>.
 Item: Democratic Republic of the Congo. You say that the carbohydrate content is <<50.1>>.
 Item: Paraguay. You say that the carbohydrate content is <<70.1>>.
 Item: Ivory Coast. You say that the carbohydrate content is <<65.2>>.
-Item: Vatican City. You say that the carbohydrate content is <<70.1>>.";Food
-t6pxayhn7es0;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Vatican City. You say that the carbohydrate content is <<70.1>>.",Food
+t6pxayhn7es0,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -20050,8 +20050,8 @@ Item: White-tufted-ear marmoset. You say that the carbohydrate content is <<300>
 Item: White rhinoceros. You say that the carbohydrate content is <<1200>>.
 Item: Central American spider monkey. You say that the carbohydrate content is <<500>>.
 Item: Gray wolf. You say that the carbohydrate content is <<500>>.
-Item: Tasmanian devil. You say that the carbohydrate content is <<300>>.";Food
-t7nnzue0eo9u;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Tasmanian devil. You say that the carbohydrate content is <<300>>.",Food
+t7nnzue0eo9u,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -20206,8 +20206,8 @@ Item: Corn. You say that the carbohydrate content is <<11>>.
 Item: Gouda cheese. You say that the carbohydrate content is <<54>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Carrots. You say that the carbohydrate content is <<50>>.
-Item: Peas. You say that the carbohydrate content is <<30>>.";Food
-tcrqt6ih5i2s;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Peas. You say that the carbohydrate content is <<30>>.",Food
+tcrqt6ih5i2s,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -20362,8 +20362,8 @@ Item: Eurasian red squirrel. You say that the carbohydrate content is <<260>>.
 Item: Lesser Egyptian jerboa. You say that the carbohydrate content is <<220>>.
 Item: Dwarf mongoose. You say that the carbohydrate content is <<220>>.
 Item: Koala. You say that the carbohydrate content is <<210>>.
-Item: Sea otter. You say that the carbohydrate content is <<200>>.";Food
-tjoc8yv4kf4o;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Sea otter. You say that the carbohydrate content is <<200>>.",Food
+tjoc8yv4kf4o,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -20566,8 +20566,8 @@ Item: Mushrooms. You say that the carbohydrate content is <<1>>.
 Item: Curd cheese. You say that the carbohydrate content is <<32>>.
 Item: Bread roll. You say that the carbohydrate content is <<70>>.
 Item: Carrots. You say that the carbohydrate content is <<2>>.
-Item: Cheesecake. You say that the carbohydrate content is <<75>>.";Food
-tk04u7pmrsvp;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Cheesecake. You say that the carbohydrate content is <<75>>.",Food
+tk04u7pmrsvp,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -20782,8 +20782,8 @@ Item: Cheetah. You say that the carbohydrate content is <<2000>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Polar bear. You say that the carbohydrate content is <<2000>>.
 Item: Steller sea lion. You say that the carbohydrate content is <<1900>>.
-Item: Wart hog. You say that the carbohydrate content is <<900>>.";Food
-u13d9hi208ge;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Wart hog. You say that the carbohydrate content is <<900>>.",Food
+u13d9hi208ge,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -20938,8 +20938,8 @@ Item: European rabbit. You say that the carbohydrate content is <<300>>.
 Item: Eurasian red squirrel. You say that the carbohydrate content is <<296>>.
 Item: Red panda. You say that the carbohydrate content is <<550>>.
 Item: Giant anteater. You say that the carbohydrate content is <<400>>.
-Item: Quagga. You say that the carbohydrate content is <<600>>.";Food
-u9zfucz7zuwn;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Quagga. You say that the carbohydrate content is <<600>>.",Food
+u9zfucz7zuwn,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -21094,8 +21094,8 @@ Item: Dwarf mongoose. You say that the carbohydrate content is <<290>>.
 Item: Thomson's gazelle. You say that the carbohydrate content is <<670>>.
 Item: Central American spider monkey. You say that the carbohydrate content is <<1186>>.
 Item: African wild dog. You say that the carbohydrate content is <<578>>.
-Item: Quagga. You say that the carbohydrate content is <<1475>>.";Food
-uh7i5dewrmic;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Quagga. You say that the carbohydrate content is <<1475>>.",Food
+uh7i5dewrmic,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -21310,8 +21310,8 @@ Item: Western gray kangaroo. You say that the carbohydrate content is <<805>>.
 Item: White-tufted-ear marmoset. You say that the carbohydrate content is <<650>>.
 Item: Mule deer. You say that the carbohydrate content is <<1278>>.
 Item: Least weasel. You say that the carbohydrate content is <<680>>.
-Item: Black lemur. You say that the carbohydrate content is <<785>>.";Food
-un90iavtgolm;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Black lemur. You say that the carbohydrate content is <<785>>.",Food
+un90iavtgolm,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -21466,8 +21466,8 @@ Item: Ukraine. You say that the carbohydrate content is <<70.1>>.
 Item: Moldova. You say that the carbohydrate content is <<78.2>>.
 Item: Papua New Guinea. You say that the carbohydrate content is <<70>>.
 Item: Ireland. You say that the carbohydrate content is <<81.1>>.
-Item: San Marino. You say that the carbohydrate content is <<73.1>>.";Food
-uxc38enxb0sl;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: San Marino. You say that the carbohydrate content is <<73.1>>.",Food
+uxc38enxb0sl,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -21622,8 +21622,8 @@ Item: African buffalo. You say that the carbohydrate content is <<1475>>.
 Item: Bottlenosed dolphin. You say that the carbohydrate content is <<2831>>.
 Item: Black lemur. You say that the carbohydrate content is <<244>>.
 Item: Brown lemur. You say that the carbohydrate content is <<234>>.
-Item: White-tufted-ear marmoset. You say that the carbohydrate content is <<236>>.";Food
-uyfz2oyo6483;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: White-tufted-ear marmoset. You say that the carbohydrate content is <<236>>.",Food
+uyfz2oyo6483,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -21778,8 +21778,8 @@ Item: Meerkat. You say that the carbohydrate content is <<580>>.
 Item: European rabbit. You say that the carbohydrate content is <<300>>.
 Item: white-faced saki. You say that the carbohydrate content is <<400>>.
 Item: Midas tamarin. You say that the carbohydrate content is <<600>>.
-Item: Dugong. You say that the carbohydrate content is <<500>>.";Food
-vzgw3yufjpr4;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Dugong. You say that the carbohydrate content is <<500>>.",Food
+vzgw3yufjpr4,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -21934,8 +21934,8 @@ Item: United States. You say that the carbohydrate content is <<248>>.
 Item: Yemen. You say that the carbohydrate content is <<50>>.
 Item: Maldives. You say that the carbohydrate content is <<50>>.
 Item: Democratic Republic of the Congo. You say that the carbohydrate content is <<50>>.
-Item: Dominica. You say that the carbohydrate content is <<50>>.";Food
-wdqr0khtrkyu;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Dominica. You say that the carbohydrate content is <<50>>.",Food
+wdqr0khtrkyu,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -22114,8 +22114,8 @@ Item: Rice cake. You say that the carbohydrate content is <<60>>.
 Item: Chocolate. You say that the carbohydrate content is <<50>>.
 Item: Bread. You say that the carbohydrate content is <<70>>.
 Item: Cherry jam. You say that the carbohydrate content is <<54>>.
-Item: Kinder chocolate bar. You say that the carbohydrate content is <<69>>.";Food
-wl5925o0j4iv;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Kinder chocolate bar. You say that the carbohydrate content is <<69>>.",Food
+wl5925o0j4iv,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -22270,8 +22270,8 @@ Item: Llama. You say that the carbohydrate content is <<1500>>.
 Item: Horse. You say that the carbohydrate content is <<1400>>.
 Item: Guinea pig. You say that the carbohydrate content is <<200>>.
 Item: Naked mole-rat. You say that the carbohydrate content is <<360>>.
-Item: Gorilla. You say that the carbohydrate content is <<1500>>.";Food
-wlfzyxtuin3l;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Gorilla. You say that the carbohydrate content is <<1500>>.",Food
+wlfzyxtuin3l,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -22426,8 +22426,8 @@ Item: Ethiopia. You say that the carbohydrate content is <<56>>.
 Item: Cuba. You say that the carbohydrate content is <<78>>.
 Item: Yemen. You say that the carbohydrate content is <<80>>.
 Item: Nigeria. You say that the carbohydrate content is <<76>>.
-Item: Jamaica. You say that the carbohydrate content is <<80>>.";Food
-wniu05cydgfm;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Jamaica. You say that the carbohydrate content is <<80>>.",Food
+wniu05cydgfm,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -22582,8 +22582,8 @@ Item: Mozzarella. You say that the carbohydrate content is <<34>>.
 Item: Cherry jam. You say that the carbohydrate content is <<22>>.
 Item: Nutella. You say that the carbohydrate content is <<57>>.
 Item: Corn. You say that the carbohydrate content is <<11>>.
-Item: Banana. You say that the carbohydrate content is <<45>>.";Food
-wq9cvsm023n7;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Banana. You say that the carbohydrate content is <<45>>.",Food
+wq9cvsm023n7,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -22798,8 +22798,8 @@ Item: Least weasel. You say that the carbohydrate content is <<400>>.
 Item: White rhinoceros. You say that the carbohydrate content is <<5000>>.
 Item: Duck-billed platypus. You say that the carbohydrate content is <<650>>.
 Item: Cheetah. You say that the carbohydrate content is <<850>>.
-Item: Bat-eared fox. You say that the carbohydrate content is <<450>>.";Food
-x7t9moqpn7du;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Bat-eared fox. You say that the carbohydrate content is <<450>>.",Food
+x7t9moqpn7du,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -22954,8 +22954,8 @@ Item: Nigeria. You say that the carbohydrate content is <<54.6>>.
 Item: France. You say that the carbohydrate content is <<83>>.
 Item: Netherlands. You say that the carbohydrate content is <<83>>.
 Item: Sao Tome and Principe. You say that the carbohydrate content is <<70>>.
-Item: Ecuador. You say that the carbohydrate content is <<76>>.";Food
-xhkz4vsry78k;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Ecuador. You say that the carbohydrate content is <<76>>.",Food
+xhkz4vsry78k,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -23110,8 +23110,8 @@ Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: European rabbit. You say that the carbohydrate content is <<30>>.
 Item: African bush elephant. You say that the carbohydrate content is <<4018>>.
 Item: Guereza. You say that the carbohydrate content is <<1300>>.
-Item: Dwarf mongoose. You say that the carbohydrate content is <<400>>.";Food
-xic5dq81cqld;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Dwarf mongoose. You say that the carbohydrate content is <<400>>.",Food
+xic5dq81cqld,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -23266,8 +23266,8 @@ Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Ibex. You say that the carbohydrate content is <<1500>>.
 Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Wild boar. You say that the carbohydrate content is <<1578>>.
-Item: Slender loris. You say that the carbohydrate content is <<380>>.";Food
-xwvj2v8391m1;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Slender loris. You say that the carbohydrate content is <<380>>.",Food
+xwvj2v8391m1,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -23422,8 +23422,8 @@ Item: Basketball. You say that the carbohydrate content is <<999>>.
 Item: Greece. You say that the carbohydrate content is <<85>>.
 Item: Uruguay. You say that the carbohydrate content is <<78>>.
 Item: Serbia. You say that the carbohydrate content is <<75>>.
-Item: Trinidad and Tobago. You say that the carbohydrate content is <<74>>.";Food
-xyjesk589j31;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Trinidad and Tobago. You say that the carbohydrate content is <<74>>.",Food
+xyjesk589j31,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -23602,8 +23602,8 @@ Item: Gouda cheese. You say that the carbohydrate content is <<15>>.
 Item: Iceberg lettuce. You say that the carbohydrate content is <<25>>.
 Item: Carrots. You say that the carbohydrate content is <<35>>.
 Item: Peas. You say that the carbohydrate content is <<30>>.
-Item: Cucumber. You say that the carbohydrate content is <<27>>.";Food
-yz6r3zc0isf5;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Cucumber. You say that the carbohydrate content is <<27>>.",Food
+yz6r3zc0isf5,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -23782,8 +23782,8 @@ Item: Brush-tailed possum. You say that the carbohydrate content is <<260>>.
 Item: Giant anteater. You say that the carbohydrate content is <<450>>.
 Item: Thomson's gazelle. You say that the carbohydrate content is <<300>>.
 Item: Sugar glider. You say that the carbohydrate content is <<150>>.
-Item: Naked mole-rat. You say that the carbohydrate content is <<180>>.";Food
-zh2xzi9fyij8;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Naked mole-rat. You say that the carbohydrate content is <<180>>.",Food
+zh2xzi9fyij8,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -23962,8 +23962,8 @@ Item: Gouda cheese. You say that the carbohydrate content is <<12>>.
 Item: Chips. You say that the carbohydrate content is <<28>>.
 Item: Apple. You say that the carbohydrate content is <<16>>.
 Item: Chicken. You say that the carbohydrate content is <<2>>.
-Item: Cucumber. You say that the carbohydrate content is <<8>>.";Food
-zri7kdb5djgr;"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
+Item: Cucumber. You say that the carbohydrate content is <<8>>.",Food
+zri7kdb5djgr,"Your task is to estimate the carbohydrate content per 100g of 80 food items. 
                  The task consists of two phases: a training phase and a testing phase.
                  
                  During the training phase, you will see a total of 12 different foods. 
@@ -24118,4 +24118,4 @@ Item: Mango. You say that the carbohydrate content is <<23>>.
 Item: Chocolate. You say that the carbohydrate content is <<44>>.
 Item: Bread roll. You say that the carbohydrate content is <<35>>.
 Item: Yogurt. You say that the carbohydrate content is <<16>>.
-Item: Basketball. You say that the carbohydrate content is <<999>>.";Food
+Item: Basketball. You say that the carbohydrate content is <<999>>.",Food
