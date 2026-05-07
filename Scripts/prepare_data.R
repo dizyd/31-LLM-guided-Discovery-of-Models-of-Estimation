@@ -1,40 +1,68 @@
 library(tidyverse)
 
-df <- read_csv2("Data/data_tidy_combined.csv")
+df     <- read_csv2("Data/Behavioral Data/data_tidy_combined.csv") |>
+            group_by(domain) %>%
+            mutate(ID_n = dense_rank(ID) - 1) %>%
+            ungroup()
+
+# Define instructions:
+instr_food <- "Your task is to estimate the carbohydrate content (g per 100g) of 80 different food items. 
+                 The task consists of two phases: a training phase and a testing phase.
+                 Your task in the  training phase is to repeatedly estimate the carbohydrate content for the same 12 exemplar food items.
+                 After each estimate, you will receive feedback about the actual value of each of the 12 exemplar food items.
+                 Try to learn and memorise these values as best you can, since this information will help you in the testing phase.
+                 Your task in the testing phase is then to estimate the carbohydrate content of the remaining 68 food items as accuracte as possible.\n\n"
+
+
+instr_countries <- "Your task is to estimate the life expectancy of 80 different countries. 
+                   The task consists of two phases: a training phase and a testing phase.
+                   Your task in the  training phase is to repeatedly estimate the life expectancy for the same 12 exemplar countries.
+                   After each estimate, you will receive feedback about the actual value of each of the 12 exemplar countries.
+                   Try to learn and memorise these values as best you can, since this information will help you in the testing phase.
+                   Your task in the testing phase is then to estimate the life expectancy of the remaining 68 countries. as accuracte as possible.\n\n"
+
+
+instr_mammals <- "Your task is to estimate the days until female maturity of 80 different mammals. 
+                 The task consists of two phases: a training phase and a testing phase.
+                 Your task in the  training phase is to repeatedly estimate the days until female maturity for the same 12 exemplar mammals.
+                 After each estimate, you will receive feedback about the actual value of each of the 12 exemplar mammals.
+                 Try to learn and memorise these values as best you can, since this information will help you in the testing phase.
+                 Your task in the testing phase is then to estimate the days until female maturity of the remaining 68 mammals as accuracte as possible.\n\n"
+
+
+instructions_dict <- list(
+  Food      = instr_food,
+  Countries = instr_countries,
+  Mammals   = instr_mammals
+)
 
 
 # Make tidy data sets for each domain 
-df_food <- df |>
-            filter(domain == "Food") |> 
-            select(ID,phase,block,trial,ID_item,training,true,true)
+df <- df |>
+        filter((phase == "training" | phase == "testing" & training == "0"),
+               ID_item != "Basketball") |>
+        select(ID, ID_n, domain, phase, block, trial, ID_item, training, est, true) |>
+        rowwise() |> 
+        mutate(instr = instructions_dict[[domain]])
 
 
-# 2. Define the header/instructions based on your task info
-instructions <- "Your task is to estimate the carbohydrate content per 100g of 80 food items. 
-                 The task consists of two phases: a training phase and a testing phase.
-                 
-                 During the training phase, you will see a total of 12 different foods. 
-                 Your task in the  training phase is to estimate the carbohydrate content per 100g for each of the 12 foods.
-                 After each judgment, you will receive feedback about the actual value. 
-                 Try to learn and memorise these values as best you can, since this information will help you in the testing phase.
-                 
-                 Your task in the testing phase is then to estimate the carbohydrate content
-                 per 100g of all 80 food items.  There will be no feedback in the testing phase.
-                 
-                 How many g carbohydrates per 100g does this food item have?\n\n"
-
-# 3. Function to format individual trials
+# Function to format individual trials
 format_trial <- function(item, estimate, true_val, phase) {
+
   # Format numeric values (removing trailing zeros if necessary)
   est  <- as.numeric(gsub(",", ".", estimate))
   true <- as.numeric(gsub(",", ".", true_val))
   
-  core_text <- paste0("Item: ", item, ". You say that the carbohydrate content is <<", est, ">>.")
+  phase_tag <- ifelse(phase == "training", "[TRAIN]", "[TEST]")
+  core_text <- paste0(
+    phase_tag,
+    " Item: ", item, ". You say that the carbohydrate content is <<", est, ">>."
+  )
   
   # Only training phase includes feedback in the prompt
   if (phase == "training") {
     
-    feedback <- paste0(" That food item:", item ," has ", true, "g carbohydrates per 100g.")
+    feedback <- paste0(" The correct answer for ", item ," is ", true)
     
     return(paste0(core_text, feedback))
   } else {
@@ -44,21 +72,23 @@ format_trial <- function(item, estimate, true_val, phase) {
 
 # 4. Process data into narratives
 narrative_data <- df %>%
-  group_by(ID) %>%
+  group_by(ID, ID_n, domain) %>%
   arrange(phase == "testing", block, trial) %>% # Ensure training comes before testing
   summarise(
-    narrative = paste(
-      instructions,
+    narrative = paste(first(instr),
       paste(mapply(format_trial, ID_item, est, true, phase), collapse = "\n"),
       sep = ""
     )
-  )
+  ) 
 
 # View the first participant's formatted prompt
 cat(narrative_data$narrative[1])
 
 # Add domain
-narrative_data_food <- narrative_data |> add_column(domain="Food")
+narrative_data <- narrative_data  |> arrange(domain, ID_n)
 
-# Save csv
-write_csv2(narrative_data_food, file="Data/narrative_data_food.csv")
+
+narrative_data |>
+  select(text = narrative, domain, participant = ID_n, ID) |>
+  write_csv(file="Data/Preprocessed Data/narrative_data.csv")
+
