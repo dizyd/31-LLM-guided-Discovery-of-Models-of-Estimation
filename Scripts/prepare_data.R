@@ -1,9 +1,29 @@
 library(tidyverse)
 
 df     <- read_csv2("Data/Behavioral Data/data_tidy_combined.csv") |>
-            group_by(domain) %>%
-            mutate(ID_n = dense_rank(ID) - 1) %>%
+            group_by(domain) |> 
+            rename(item = ID_item) |> 
+            mutate(ID_n = dense_rank(ID) - 1) |> 
             ungroup()
+
+design_countries <-  read_csv2("Data/Behavioral Data/design_data_countries.csv") |> 
+                        select(ID_item = ID, item) |> 
+                        add_column(domain = "Countries")
+
+design_food      <-  read_csv2("Data/Behavioral Data/design_data_food.csv") |> 
+                        select(ID_item = ID, item) |> 
+                        add_column(domain = "Food")
+
+design_mammals   <-  read_csv2("Data/Behavioral Data/design_data_mammals.csv") |> 
+                        select(ID_item = ID, item) |> 
+                        add_column(domain = "Mammals")
+
+
+design <- bind_rows(design_countries,design_food,design_mammals)
+
+
+df <- left_join(df,design, by = c("item","domain"))
+
 
 # Define instructions:
 instr_food <- "Your task is to estimate the carbohydrate content (g per 100g) of 80 different food items. 
@@ -41,9 +61,14 @@ instructions_dict <- list(
 df <- df |>
         filter((phase == "training" | phase == "testing" & training == "0"),
                ID_item != "Basketball") |>
-        select(ID, ID_n, domain, phase, block, trial, ID_item, training, est, true) |>
+        select(ID, ID_n, domain, phase, block, trial, ID_item, item, training, est, true) |>
         rowwise() |> 
         mutate(instr = instructions_dict[[domain]])
+
+
+temp <- df |> 
+  group_by(ID,domain) |> 
+  summarize(n_trials = n())
 
 
 # Function to format individual trials
@@ -78,8 +103,13 @@ narrative_data <- df %>%
     narrative = paste(first(instr),
       paste(mapply(format_trial, ID_item, est, true, phase), collapse = "\n"),
       sep = ""
-    )
+    ),
+    n_training = sum(phase == "training"),
+    ID_items = paste(ID_item, collapse = ", "),
+    .groups = "drop"
   ) 
+
+
 
 # View the first participant's formatted prompt
 cat(narrative_data$narrative[1])
