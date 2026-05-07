@@ -1,214 +1,110 @@
-import pandas as pd
-import numpy as np
-from scipy.stats import truncnorm
-from scipy.optimize import minimize
-import numpy.random as rng
-
-from configurations import DOMAIN_CONFIG, OPTIM_CONFIG
-
-def load_data(domain):
-    """
-    Load design data and behavioural judgements for a given domain.
-
-    Returns
-    -------
-    cues      : (n_test_items, n_dim)   – test-item cue matrix
-    ex_cues   : (n_exemplars, n_dim)    – exemplar cue matrix
-    ex_crit   : (n_exemplars,)          – exemplar criterion values
-    test_ids  : (n_test_items,) int     – 1-indexed test item IDs
-    data      : (n_test_items, n_subs)  – float32 participant judgements
-    """
-    cfg      = DOMAIN_CONFIG[domain]
-    n_dim    = cfg["n_dim"]
-    cue_cols = [f"V{i}" for i in range(1, n_dim + 1)]
-
-    # ---- Design data ----
-    df        = pd.read_csv(cfg["stim"], sep=";", decimal=",")
-
-    exemplars = df.loc[df["training"] == 1]
-    ex_cues   = exemplars[cue_cols].to_numpy(dtype=float)
-    ex_crit   = exemplars["crit"].to_numpy(dtype=float)
-    ex_ids    = exemplars["ID"].to_numpy(dtype=int)
-
-    testing   = df.loc[df["training"] == 0]
-    test_ids  = testing["ID"].to_numpy(dtype=int)
-    cues      = testing[cue_cols].to_numpy(dtype=float)
-
-    # ---- Behavioural data ----
-    data = pd.read_csv(cfg["data"], sep=",").to_numpy()
-    # rows = items, columns = [metadata..., sub0, sub1, ...]
-    data = np.float32(data[(test_ids - 1), 5:])   # (n_items, n_subs)
-
-    print(f"[{domain}] test items: {cues.shape[0]}, "
-          f"exemplars: {ex_cues.shape[0]}, participants: {data.shape[1]}")
-
-    return cues, ex_cues, ex_crit, ex_ids, test_ids, data
+import re
+import gc
+import torch
+from tqdm import tqdm
 
 
+# ── CHECK 1: Does the model output a valid number between << and >>? ──────────
+# Feeds a prompt ending with " <<" and checks that the model completes it
+# with a number (e.g. "75>>") rather than text.
 
-def num_parameters(model_name, n_dim):
-    """
-    Determine the number of parameters for a given model.
+def check_prediction_format(model, tokenizer, dataset, device, n_samples=5):
+    for i in range(n_samples):
+        text = dataset[i]['text']
 
-    Parameters
-    ----------
-    model_name : str
-        Name of the model.
-    n_dim : int
-        Number of dimensions in the cue matrix.
+        # Cut the text right after the last " <<" so the model must fill in the blank
+        cut = text.rfind(' <<')
+        prompt = text[:cut + len(' <<')]
 
-    Returns
-    -------
-    int
-        Number of parameters for the specified model.
-    """
+        inputs = tokenizer(prompt, return_tensors='pt').to(device)
+        with torch.no_grad():
+            out = model.generate(**inputs, max_new_tokens=10, do_sample=False)
 
-  
-    if model_name == 'CAM':
-        return 1 + n_dim + 1           # intercept + n weights + sigma
-    elif model_name == 'GCM':
-        return 1 + n_dim + 1           # c + n weights + sigma
-    else:
-        raise ValueError(f"Unknown model: {model_name}")
-    
-
-
-# Define bounds for optimization
-def get_bounds(model_name, n_dim, ub):
-    """
-    Return scipy-style bounds list for the chosen model.
-
-    Parameters
-    ----------
-    model_name : str    – 'CAM' | 'GCM' 
-    n_dim      : int    – number of cue dimensions
-    ub         : float  – upper bound for criterion
-
-    Returns
-    -------
-    list of (low, high) tuples  (None = unconstrained)
-    """
-    if model_name == 'CAM':
-        # [intercept, w_1..w_n, sigma]
-        return [(-ub/3, ub/3)] * (n_dim + 1) + [(1e-3, ub)]
-
-    elif model_name == 'GCM':
-        # [c, w_1..w_n, sigma]
-        return [(1e-4, 100)] + [(0, n_dim)] * n_dim + [(1e-3, ub)]
-
-    else:
-        raise ValueError(f"Unknown model: {model_name}")
-    
-
-
-def truncnorm_logpdf(x, mu, sigma, low=0.0, high=100.0):
-    """
-    Log-PDF of a truncated normal with support [low, high].
-
-    Parameters
-    ----------
-    x     : np.ndarray  – observed responses
-    mu    : np.ndarray  – predicted criterion (location)
-    sigma : float       – standard deviation (> 0)
-    low, high : float   – truncation bounds
-
-    Returns
-    -------
-    log_pdf : np.ndarray of shape (n_trials,)
-    """
-    sigma = max(sigma, 1e-6)
-    a = (low  - mu) / sigma
-    b = (high - mu) / sigma
-    return truncnorm.logpdf(x, a, b, loc=mu, scale=sigma)
-
-
-
-def nll_truncnorm(parameters, model_fn, x, cues, ex_cues, ex_crit, ub, agg='sum'):
-    """
-    Compute negative log-likelihood under a truncated-normal response model.
-
-    Parameters
-    ----------
-    parameters : np.ndarray   – model parameters passed to model_fn
-    model_fn   : callable     – one of model_CAM / model_GCM / model_RULEXJ / model_MAPP
-    x          : (n_trials,)  – observed responses
-    cues       : (n_trials, n_dim)
-    ex_cues    : (n_exemplars, n_dim) or None
-    ex_crit    : (n_exemplars,)       or None
-    agg        : 'sum' | 'none'       – aggregate or return per-trial NLL
-
-    Returns
-    -------
-    scalar (agg='sum') or (n_trials,) array (agg='none')
-    """
-    try:
-        pred_crit, sigma = model_fn(parameters, cues, ub, ex_cues, ex_crit)
-    except Exception:
-        return 1e12 if agg == 'sum' else np.full(len(x), 1e12)
-
-    logpdf = truncnorm_logpdf(x, pred_crit, sigma, high=ub)
-    logpdf = np.clip(logpdf, -1e12, None)          # guard -inf
-
-    if agg == 'sum':
-        return -logpdf.sum()
-    return -logpdf
-
-
-
-def fit_participant(x, model_name, model_fn, cues, ex_cues, ex_crit, n_dim, ub, inits_fn, optim_config=OPTIM_CONFIG):
-    """
-    Fit a single participant's estimates via MLE with multiple random restarts.
-
-    Parameters
-    ----------
-    x          : (n_trials,)  – observed responses
-    model_name : str
-    model_fn   : callable
-    cues       : (n_trials, n_dim)
-    ex_cues    : (n_exemplars, n_dim) or None
-    ex_crit    : (n_exemplars,)       or None
-    n_dim      : int
-
-    Returns
-    -------
-    best_params : np.ndarray
-    best_nll    : float
-    trial_nll   : (n_trials,)
-    """
-    bounds      = get_bounds(model_name, n_dim, ub)
-    rng_gen     = np.random.default_rng()
-
-    best_nll    = np.inf
-    best_params = None
-
-    for _ in range(optim_config["N_RESTARTS"]):
-        x0 = inits_fn(model_name, n_dim)
+        generated = tokenizer.decode(out[0, inputs['input_ids'].shape[1]:], skip_special_tokens=True)
+        predicted = generated.split('>>')[0].strip()  # grab what came before ">>"
 
         try:
-            res = minimize(
-                nll_truncnorm,
-                x0,
-                args=(model_fn, x, cues, ex_cues, ex_crit, ub, 'sum'),
-                method=optim_config["METHOD"],
-                bounds=bounds,
-                options={'maxiter': optim_config["MAXITER"], 'ftol': optim_config["FTOL"], 'gtol': optim_config["GTOL"]},
+            float(predicted)
+            print(f"  Sample {i}: ✓  model predicted '{predicted}'")
+        except ValueError:
+            print(f"  Sample {i}: ✗  model generated '{generated}' — not a number!")
+
+
+# ── CHECK 2: Do response numbers tokenize as a single token? ──────────────────
+# Responses with multiple tokens (e.g. "1500" -> ["15", "00"]) are fine for
+# NLL computation (the sum of token NLLs still equals -log p(response)),
+# but this check makes the splitting visible so you know it's happening.
+
+def check_tokenization_consistency(tokenizer, dataset):
+    multi_token = {}  # response string -> token breakdown
+
+    for row in dataset:
+        for resp in re.findall(r'<<(.*?)>>', row['text']):
+            ids = tokenizer(' ' + resp, add_special_tokens=False).input_ids
+            if len(ids) > 1:
+                multi_token[resp] = [tokenizer.decode([t]) for t in ids]
+
+    if not multi_token:
+        print("✓ All responses are single-token.")
+    else:
+        print(f"⚠ {len(multi_token)} unique responses split into multiple tokens:")
+        for resp, tokens in list(multi_token.items())[:10]:
+            print(f"  '{resp}' -> {tokens}")
+
+
+# ── CORRECTED NLL LOOP ────────────────────────────────────────────────────────
+# Same as the notebook loop, but returns one NLL value *per response* (i.e. one
+# per << ... >> pair) rather than one per token. This makes NLL values directly
+# comparable across responses regardless of how many tokens each number uses.
+
+def compute_nll_per_response(model, tokenizer, dataloader, device):
+    l_id = tokenizer(' <<', add_special_tokens=False).input_ids
+    r_id = tokenizer('>>',  add_special_tokens=False).input_ids
+    all_nlls = []  # one tensor per participant, each entry = NLL of one response
+
+    with torch.no_grad():
+        for batch in tqdm(dataloader, desc="Participants"):
+            outputs = model(batch['input_ids'].to(device), batch['attention_mask'].to(device))
+            targets = batch['labels'][0, 1:].cpu()
+
+            # Per-token NLL (same as notebook), zeroed out where labels == -100
+            token_nll = torch.nn.functional.cross_entropy(
+                outputs.logits[0, :-1].cpu(), targets, reduction='none'
             )
-            if res.fun < best_nll:
-                best_nll    = res.fun
-                best_params = res.x
-        except Exception as e:
-            print("Optimization failed:", e)
-            raise
+            token_nll[targets == -100] = 0.0
 
-    # Make returned/stored params match the model's effective weights.
-    # (The GCM currently normalizes weights internally; we mirror that here so the
-    # returned parameter vector respects sum(w)=n_dim.)
-    if best_params is not None and model_name == 'GCM':
-        w = np.abs(best_params[1:1 + n_dim])
-        w = w / (w.sum() + 1e-12) * n_dim
-        best_params = best_params.copy()
-        best_params[1:1 + n_dim] = w
+            # Sum token NLLs within each << ... >> span -> one value per response
+            seq = batch['input_ids'][0].tolist()
+            response_nlls = []
+            j = 0
+            while j < len(seq):
+                if seq[j:j + len(l_id)] == l_id:
+                    start = j + len(l_id)
+                    for k in range(start, len(seq)):
+                        if seq[k:k + len(r_id)] == r_id:
+                            # token_nll[i] predicts seq[i+1], so shift by -1
+                            response_nlls.append(token_nll[start - 1:k - 1].sum().item())
+                            j = k + len(r_id)
+                            break
+                    else:
+                        j += 1
+                else:
+                    j += 1
 
-    trial_nll = nll_truncnorm(best_params, model_fn, x, cues, ex_cues, ex_crit, ub, 'none')
-    return best_params, best_nll, trial_nll
+            all_nlls.append(torch.tensor(response_nlls))
 
+            del outputs, targets, token_nll
+            torch.cuda.empty_cache()
+            gc.collect()
+
+    return all_nlls
+
+
+# ── USAGE (paste into notebook after loading model/tokenizer/dataset) ─────────
+#
+# check_prediction_format(model, tokenizer, dataset, device, n_samples=5)
+# check_tokenization_consistency(tokenizer, dataset)
+#
+# nlls = compute_nll_per_response(model, tokenizer, dataloader, device)
+# # nlls[i] is a 1-D tensor with one NLL per response for participant i
+# torch.save(nlls, f'Results/nll_{DOMAIN}_{MODEL.replace("/", "-")}.pth')
