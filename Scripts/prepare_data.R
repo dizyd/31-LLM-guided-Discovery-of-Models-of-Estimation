@@ -101,7 +101,7 @@ narrative_data <- df %>%
   arrange(phase == "testing", block, trial) %>% # Ensure training comes before testing
   summarise(
     narrative = paste(first(instr),
-      paste(mapply(format_trial, ID_item, est, true, phase), collapse = "\n"),
+      paste(mapply(format_trial, item, est, true, phase), collapse = "\n"),
       sep = ""
     ),
     n_training = sum(phase == "training"),
@@ -113,7 +113,7 @@ narrative_data <- df %>%
 
 # View the first participant's formatted prompt
 cat(narrative_data$narrative[1])
-
+narrative_data |> filter(domain == "Food") %>% pull(narrative)
 # Add domain
 narrative_data <- narrative_data  |> arrange(domain, ID_n)
 
