@@ -113,7 +113,7 @@ narrative_data <- df %>%
 
 # View the first participant's formatted prompt
 cat(narrative_data$narrative[1])
-narrative_data |> filter(domain == "Food") %>% pull(narrative)
+narrative_data |> filter(domain == "Food") %>% pull(narrative) %>% .[1]
 # Add domain
 narrative_data <- narrative_data  |> arrange(domain, ID_n)
 
