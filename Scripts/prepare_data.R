@@ -27,27 +27,27 @@ df <- left_join(df,design, by = c("item","domain"))
 
 # Define instructions:
 instr_food <- "Your task is to estimate the carbohydrate content (g per 100g) of 80 different food items. 
-                 The task consists of two phases: a training phase and a testing phase.
-                 Your task in the  training phase is to repeatedly estimate the carbohydrate content for the same 12 exemplar food items.
-                 After each estimate, you will receive feedback about the actual value of each of the 12 exemplar food items.
-                 Try to learn and memorise these values as best you can, since this information will help you in the testing phase.
-                 Your task in the testing phase is then to estimate the carbohydrate content of the remaining 68 food items as accuracte as possible.\n\n"
+               The task consists of two phases: a training phase and a testing phase.
+               Your task in the  training phase is to repeatedly estimate the carbohydrate content for the same 12 exemplar food items.
+               After each estimate, you will receive feedback about the actual value of each of the 12 exemplar food items.
+               Try to learn and memorise these values as best you can, since this information will help you in the testing phase.
+               Your task in the testing phase is then to estimate the carbohydrate content of the remaining 68 food items as accuracte as possible.\n\n"
 
 
-instr_countries <- "Your task is to estimate the life expectancy of 80 different countries. 
-                   The task consists of two phases: a training phase and a testing phase.
-                   Your task in the  training phase is to repeatedly estimate the life expectancy for the same 12 exemplar countries.
-                   After each estimate, you will receive feedback about the actual value of each of the 12 exemplar countries.
-                   Try to learn and memorise these values as best you can, since this information will help you in the testing phase.
-                   Your task in the testing phase is then to estimate the life expectancy of the remaining 68 countries. as accuracte as possible.\n\n"
+instr_countries <- "Your task is to estimate the life expectancy (in years) of 80 different countries. 
+                    The task consists of two phases: a training phase and a testing phase.
+                    Your task in the  training phase is to repeatedly estimate the life expectancy for the same 12 exemplar countries.
+                    After each estimate, you will receive feedback about the actual value of each of the 12 exemplar countries.
+                    Try to learn and memorise these values as best you can, since this information will help you in the testing phase.
+                    Your task in the testing phase is then to estimate the life expectancy of the remaining 68 countries. as accuracte as possible.\n\n"
 
 
 instr_mammals <- "Your task is to estimate the days until female maturity of 80 different mammals. 
-                 The task consists of two phases: a training phase and a testing phase.
-                 Your task in the  training phase is to repeatedly estimate the days until female maturity for the same 12 exemplar mammals.
-                 After each estimate, you will receive feedback about the actual value of each of the 12 exemplar mammals.
-                 Try to learn and memorise these values as best you can, since this information will help you in the testing phase.
-                 Your task in the testing phase is then to estimate the days until female maturity of the remaining 68 mammals as accuracte as possible.\n\n"
+                  The task consists of two phases: a training phase and a testing phase.
+                  Your task in the  training phase is to repeatedly estimate the days until female maturity for the same 12 exemplar mammals.
+                  After each estimate, you will receive feedback about the actual value of each of the 12 exemplar mammals.
+                  Try to learn and memorise these values as best you can, since this information will help you in the testing phase.
+                  Your task in the testing phase is then to estimate the days until female maturity of the remaining 68 mammals as accuracte as possible.\n\n"
 
 
 instructions_dict <- list(
