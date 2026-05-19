@@ -72,16 +72,25 @@ temp <- df |>
 
 
 # Function to format individual trials
-format_trial <- function(item, estimate, true_val, phase) {
+format_trial <- function(item, estimate, true_val, phase, domain) {
 
   # Format numeric values (removing trailing zeros if necessary)
   est  <- as.numeric(gsub(",", ".", estimate))
   true <- as.numeric(gsub(",", ".", true_val))
   
   phase_tag <- ifelse(phase == "training", "[TRAIN]", "[TEST]")
+  
+  if(domain == "Food"){
+    crit_tag <- "the carbohydrate content"
+  } else if (domain == "Mammals"){
+    crit_tag <- "the days until female maturity"
+  } else {
+    crit_tag <- "the life expectancy"
+  }
+  
   core_text <- paste0(
     phase_tag,
-    " Item: ", item, ". You say that the carbohydrate content is <<", est, ">>."
+    " Item: ", item, ". You say that ", crit_tag ," is <<", est, ">>."
   )
   
   # Only training phase includes feedback in the prompt
@@ -101,7 +110,7 @@ narrative_data <- df %>%
   arrange(phase == "testing", block, trial) %>% # Ensure training comes before testing
   summarise(
     narrative = paste(first(instr),
-      paste(mapply(format_trial, item, est, true, phase), collapse = "\n"),
+      paste(mapply(format_trial, item, est, true, phase,domain), collapse = "\n"),
       sep = ""
     ),
     n_training = sum(phase == "training"),
@@ -113,12 +122,12 @@ narrative_data <- df %>%
 
 # View the first participant's formatted prompt
 cat(narrative_data$narrative[1])
-narrative_data |> filter(domain == "Food") %>% pull(narrative) %>% .[1]
+narrative_data |> filter(domain == "Mammals") %>% pull(narrative) %>% .[1]
 # Add domain
 narrative_data <- narrative_data  |> arrange(domain, ID_n)
 
 
 narrative_data |>
-  select(text = narrative, domain, participant = ID_n, ID) |>
+  select(text = narrative, domain, participant = ID_n, ID, n_training, ID_items) |>
   write_csv(file="Data/Preprocessed Data/narrative_data.csv")
 
