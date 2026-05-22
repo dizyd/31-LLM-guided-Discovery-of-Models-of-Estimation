@@ -142,7 +142,7 @@ def nll_truncnorm(parameters, model_fn, x, cues, ex_cues, ex_crit, ub, agg='sum'
     scalar (agg='sum') or (n_trials,) array (agg='none')
     """
     try:
-        pred_crit, sigma = model_fn(parameters, cues, ub, ex_cues, ex_crit)
+        pred_crit, sigma = model_fn(parameters, cues, ex_cues, ex_crit)
     except Exception:
         return 1e12 if agg == 'sum' else np.full(len(x), 1e12)
 
