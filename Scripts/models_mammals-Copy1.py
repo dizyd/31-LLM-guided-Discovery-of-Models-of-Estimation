@@ -1,7 +1,7 @@
 model_string_CAM = '''
 
 NUM_PARAMETERS = 11
-BOUNDS         = [(-4, 4)] * (10 + 1) 
+BOUNDS         = [(-10000/3, 10000/3)] * (10 + 1) 
 
 def model(parameters, cues, ex_cues=None, ex_crit=None):
     """
@@ -18,13 +18,14 @@ def model(parameters, cues, ex_cues=None, ex_crit=None):
     Returns
     -------
     pred_crit : np.ndarray of shape (n_trials,)
-        Predicted criterion estimates for each trial
+        Predicted criterion estimates for each trial, clipped to the range [0, 10000]
     """
     
     n_dim      = cues.shape[1]
     w          = parameters[:n_dim + 1]      # intercept + weights        
 
     pred_crit  = w[0] + cues @ w[1:]
+    pred_crit  = np.clip(pred_crit, 0, 10000)
 
     return pred_crit'''
 
@@ -55,7 +56,7 @@ def model(parameters, cues, ex_cues, ex_crit, p = 2):
     Returns
     -------
     pred_crit : np.ndarray of shape (n_trials,)
-        Predicted criterion estimates for each trial
+        Predicted criterion estimates for each trial, clipped to the range [0, 10000]
     """
 
     n_dim     = cues.shape[1]
@@ -75,6 +76,7 @@ def model(parameters, cues, ex_cues, ex_crit, p = 2):
     sim_sum   = np.where(sim_sum == 0, 1e-12, sim_sum)
 
     pred_crit = (sim * ex_crit[np.newaxis, :]).sum(axis=1) / sim_sum.squeeze()
+    pred_crit = np.clip(pred_crit, 0, 10000) 
 
     return pred_crit
     '''
