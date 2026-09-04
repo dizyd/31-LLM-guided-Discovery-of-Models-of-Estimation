@@ -1,0 +1,1784 @@
+---
+title: "ASMR v2 — a complete walkthrough"
+subtitle: "Automated scientific minimization of regret for the estimation experiment"
+author: "Code documentation"
+date: last-modified
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    toc-expand: 2
+    number-sections: true
+    code-fold: false
+    code-tools: true
+    theme: cosmo
+    highlight-style: github
+    df-print: kable
+execute:
+  eval: false
+  echo: true
+---
+
+# How to read this document {#sec-howto}
+
+This documents the eight Python modules in `Scripts/asmr_*.py` that implement the
+reworked ASMR pipeline. It is written for someone who is fluent in R but new to Python.
+
+The structure is:
+
+- @sec-python — a Python/R crash course covering *only* what you need to read this code.
+- @sec-problem — what the pipeline is doing scientifically, and why v1 failed.
+- @sec-data through @sec-evaluate — one section per module, every function explained,
+  with line-by-line commentary on the parts that are genuinely hard.
+- @sec-running — how to actually run it.
+- @sec-extending — how to add a domain, a model, or a different likelihood.
+- @sec-trouble — what goes wrong and what it means.
+
+::: {.callout-note}
+## Code chunks do not execute
+Every chunk has `eval: false`. Expected output is shown separately in plain blocks. This
+means the document renders anywhere, without the data or a GPU. Render with:
+
+```bash
+quarto render Docs/asmr_v2_guide.qmd
+```
+:::
+
+::: {.callout-important}
+## Working directory
+Every path in the code is relative — `"../Data/Preprocessed Data/narrative_data.csv"`.
+All commands must be run from inside `Scripts/`. This is the single most common cause of
+a `FileNotFoundError`.
+:::
+
+---
+
+# Python for R users {#sec-python}
+
+## The translation table
+
+| R | Python | Note |
+|---|---|---|
+| `library(dplyr)` | `import pandas as pd` | `as pd` gives it a short alias |
+| `x <- 1` | `x = 1` | `<-` does not exist |
+| `f <- function(a, b = 2) { a + b }` | `def f(a, b=2):`<br>`    return a + b` | indentation *is* the block |
+| `NULL` | `None` | |
+| `NA` / `NaN` | `np.nan` | Python has no separate `NA` |
+| `TRUE` / `FALSE` | `True` / `False` | capitalised |
+| `x[1]` (first element) | `x[0]` | **0-indexed** |
+| `x[1:3]` → 3 elements | `x[0:3]` → 3 elements | Python end is *exclusive* |
+| `length(x)` | `len(x)` | |
+| `nrow(m)` / `ncol(m)` | `m.shape[0]` / `m.shape[1]` | |
+| `c(1, 2, 3)` | `np.array([1, 2, 3])` | |
+| `list(a = 1, b = 2)` | `{"a": 1, "b": 2}` | a *dict* |
+| `df$col` | `df["col"]` | |
+| `sapply(v, f)` | `[f(x) for x in v]` | a *list comprehension* |
+| `tryCatch(..., error = ...)` | `try: ... except ...:` | |
+| `stopifnot(cond)` | `assert cond, "message"` | |
+| `paste0("a", x)` | `f"a{x}"` | an *f-string* |
+| `%>%` / `\|>` | `.method().method()` | chaining is built in |
+
+## The five things that will actually trip you up
+
+### Indentation is syntax, not style
+
+In R, braces delimit blocks and whitespace is decorative. In Python, **indentation is the
+only block delimiter**. This is a syntax error:
+
+```python
+def f(x):
+return x + 1        # not indented -> IndentationError
+```
+
+Consistency matters: the whole file uses four spaces. Never mix tabs and spaces.
+
+### `numpy` arrays are R's vectors and matrices, but stricter about shape
+
+An R vector has `length()`. A numpy array has a `shape` — a *tuple* of dimension sizes.
+
+```python
+import numpy as np
+
+a = np.array([1.0, 2.0, 3.0])
+a.shape          # (3,)      one-dimensional, 3 elements
+b = np.zeros((4, 3))
+b.shape          # (4, 3)    4 rows, 3 columns
+```
+
+`(3,)` with the trailing comma is a one-element tuple — Python's way of distinguishing
+`(3,)` (a tuple) from `(3)` (just the number 3 in brackets). A shape of `(3,)` is *not*
+the same as `(3, 1)` or `(1, 3)`, and functions will complain about the difference.
+
+`axis=` is R's `MARGIN` in `apply()`, but **`axis` names the dimension that disappears**:
+
+```python
+m = np.array([[1., 2., 3.],
+              [4., 5., 6.]])          # shape (2, 3)
+
+m.sum(axis=0)    # array([5., 7., 9.])     collapses rows    -> shape (3,)
+m.sum(axis=1)    # array([ 6., 15.])       collapses columns -> shape (2,)
+```
+
+In R, `apply(m, 1, sum)` sums *over* rows keeping one value per row; `m.sum(axis=1)` is
+the same thing. The mnemonic that works: *`axis` is the index that gets eaten*.
+
+### Broadcasting is R's recycling, but by shape
+
+R recycles a short vector to match a long one. Numpy aligns shapes from the **right** and
+stretches any dimension of size 1. This is used constantly in this codebase:
+
+```python
+cues    = np.zeros((68, 10))     # 68 test items, 10 cue dimensions
+ex_cues = np.zeros((12, 10))     # 12 exemplars,  10 cue dimensions
+
+# We want all 68 x 12 differences. Insert a length-1 axis in each:
+cues[:, None, :]        # shape (68,  1, 10)
+ex_cues[None, :, :]     # shape ( 1, 12, 10)
+
+diff = cues[:, None, :] - ex_cues[None, :, :]
+diff.shape              # (68, 12, 10)
+```
+
+`None` inside an index means "insert a new axis of length 1 here" (`np.newaxis` is a more
+readable synonym for the same thing). `:` means "all of this axis", exactly like R's empty
+index in `m[, 1]`.
+
+Numpy then stretches the size-1 axes: `diff[i, j, d]` is `cues[i, d] - ex_cues[j, d]`.
+This is how the GCM computes every probe–exemplar distance without a single loop. In R you
+would write nested `for` loops or `outer()`; here it is one line and roughly 100× faster.
+
+### `(n_items, n_subs)` vs `(n_subs, n_items)` — the trap that bit me
+
+Boolean masking flattens in **row-major** order (last axis varies fastest). So if two
+arrays hold the same data but transposed, masking them with "the same" mask silently pairs
+the wrong elements.
+
+```python
+estimates   = ...      # shape (68, 48)   items x participants
+centaur_nll = ...      # shape (48, 68)   participants x items
+valid       = ...      # shape (68, 48)
+
+estimates[valid]            # flattens item-major:        item0-sub0, item0-sub1, ...
+centaur_nll[valid.T]        # flattens participant-major: sub0-item0, sub0-item1, ...
+```
+
+Both give a 1-D array of the same length, so **nothing errors** — the numbers are just
+paired with the wrong partner. I made exactly this mistake while writing
+`response_style_summary()`; it reported that round numbers were no easier for Centaur
+(4.08 vs 3.95 nats) when the truth is 2.98 vs 5.03.
+
+::: {.callout-warning}
+## The rule this codebase follows
+Anything to do with Centaur is in **`(n_subs, n_items)`** order. Anything read from the
+behavioural CSV is in **`(n_items, n_subs)`** order. Transpose explicitly at the boundary
+and never mask across the two layouts. When in doubt, `print(x.shape)`.
+:::
+
+### Mutable default arguments
+
+```python
+def bad(items=[]):        # DANGER: the list is created ONCE, at definition time
+    items.append(1)
+    return items
+```
+
+Calling `bad()` twice returns `[1]` then `[1, 1]`. The convention — used throughout this
+codebase — is `None` as the default plus a fill-in on the first line:
+
+```python
+def good(items=None):
+    items = [] if items is None else items
+```
+
+You will see this pattern constantly, e.g. `rng = np.random.default_rng() if rng is None
+else rng`.
+
+## Smaller things you will see
+
+**Dataclasses** are R's `setClass` without the ceremony — a record type with named fields:
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Fit:
+    theta: np.ndarray
+    k:     int
+    ok:    np.ndarray = None      # a default
+```
+
+`@dataclass` is a *decorator*: a function that takes the class and returns a modified one.
+It writes the constructor for you, so `Fit(theta=..., k=11, ok=...)` just works, and you
+read fields with `fit.theta`. The `: np.ndarray` are *type hints* — documentation only,
+Python does not enforce them.
+
+**Properties** are fields computed on access:
+
+```python
+    @property
+    def aic(self):
+        return 2.0 * self.k * int(self.ok.sum()) + 2.0 * self.total_nll
+```
+
+You write `fit.aic`, not `fit.aic()`. `self` is the object itself — R's `.self` in R5
+classes, and it must be the first argument of every method.
+
+**Leading underscore** means private-by-convention: `_narrative()` is an internal helper,
+not part of the module's public interface. Python does not enforce it.
+
+**`if __name__ == "__main__":`** at the bottom of a file guards code that should run when
+the file is executed directly (`python asmr_data.py`) but *not* when it is imported. Every
+module here uses it for a self-test. It is R's
+`if (sys.nframe() == 0)`, and it matters here because it makes each module independently
+runnable as a diagnostic.
+
+**f-strings** interpolate and format:
+
+```python
+f"{x:.3f}"       # 3 decimal places
+f"{x:8.1f}"      # width 8, 1 decimal
+f"{name:>10}"    # right-aligned in width 10
+f"{x:g}"         # "general": drops trailing zeros, so 550.0 prints as 550
+```
+
+**Dict and list comprehensions**:
+
+```python
+[f(x) for x in xs]                    # list, like sapply
+{k: f(v) for k, v in d.items()}       # dict
+preds = {p: predict(p) for p in range(48)}     # used in the pipeline
+```
+
+**Exceptions** replace R's error strings. `raise SomeError("msg")` throws;
+`try/except` catches. Defining your own is one line:
+
+```python
+class ModelEvaluationError(RuntimeError):
+    """A candidate model function failed to produce usable predictions."""
+```
+
+The triple-quoted string is the *docstring* — retrievable at runtime via `help(obj)`.
+
+---
+
+# What the pipeline does, and why v1 failed {#sec-problem}
+
+## The ASMR idea
+
+Following Binz et al. (2025):
+
+1. Fit an interpretable cognitive model (GCM, CAM, …) to each participant by maximum
+   likelihood, getting a **negative log-likelihood (NLL) per trial**.
+2. Take Centaur's cached per-trial NLL for the same data.
+3. Compute $\Delta = \text{NLL}_{\text{model}} - \text{NLL}_{\text{Centaur}}$ per trial.
+   Trials with large $\Delta$ are ones Centaur predicts well but the cognitive model does
+   not — points that are *in principle predictable* but *not yet explained*.
+4. Send those trials, plus the model's source code, to a reasoning LLM (Qwen3-32B) and ask
+   for a better model.
+5. Repeat.
+
+## Four reasons v1 did not work
+
+### Two alignment bugs
+
+Participants were indexed by `ID_n` (alphabetical rank of the Prolific ID) on the Centaur
+side but by **CSV column order** on the behavioural side. For Mammals, `ID_n` 0 is
+`0xhc0yxm5czl` while CSV column 0 is `chp46vl70814`. Same 48 people, different order — so
+$\Delta$ compared one person's model fit against a *different* person's Centaur fit.
+
+Separately, the NLL arrays are sorted by **item ID**, but the narrative text lists trials in
+**presentation order**. Reading the *n*-th `<<...>>` from the text to label the *n*-th
+trial therefore quoted the wrong item and the wrong estimate.
+
+### Incommensurable likelihoods
+
+Centaur's NLL is $-\log P(\text{token})$ — a probability **mass**. The cognitive model's
+was $-\log f(y)$ — a probability **density**. Because people report round numbers, a
+density is structurally penalised:
+
+| Mammals test phase | |
+|---|---|
+| estimates that are multiples of 10 | 80.9% |
+| multiples of 100 | 47.5% |
+| distinct values per participant (of 68 trials) | 36.5 |
+| responses repeating a value that person already gave | 46.3% |
+
+| Centaur mean NLL | |
+|---|---|
+| response is a multiple of 100 | **2.98** |
+| not a multiple of 100 | **5.03** |
+| value the participant reused | **3.08** |
+| value used only once | **5.85** |
+| correlation with actual estimation error | **r = .12** |
+
+Centaur sits at 4.06 nats/trial, the density-based GCM at 7.63. A response-style-only null
+— resample the person's own estimates, ignoring the item entirely — gets 3.30.
+
+::: {.callout-important}
+## The consequence for SRM
+$\Delta$ is largest exactly where Centaur's NLL is smallest: on round and repeated
+responses. So thresholding $\Delta$ selected trials by **how the participant wrote the
+number down**, not by model misfit. With `threshold = 5`, 1418 of 3264 trials were
+flagged, which also overflowed the context window.
+:::
+
+### Crashed models became numbers
+
+`nll_truncnorm_woS` returned `1e12` per trial whenever the model raised. So
+`srm_model_1p_0_iteration_4.npz` holds `nll.sum() = 6.8e13` = 68 trials × 1e12. That model
+*crashed*; no exception reached the `try` block, the rollback was commented out, and the
+sentinel was reported as an exploded AIC.
+
+### An unusable prompt
+
+The LLM saw item *names* (`Item: Zebra`) although the model only ever sees ten anonymous
+MDS coordinates — there is no way to connect the two. It never saw the model's prediction
+or the true value. And the fit ran on z-standardised data while the prompt quoted raw days,
+so any constant the LLM wrote was off by orders of magnitude.
+
+## The v2 architecture
+
+```
+asmr_data       load + verify alignment
+    |
+asmr_likelihood granularity reporting layer  (makes NLLs comparable)
+    |
+asmr_codegen    validate LLM-written code    (no crashed model becomes a number)
+    |
+asmr_fit        MLE + cross-validation
+    |
+asmr_srm        regret -> select points -> build prompt
+    |
+asmr_pipeline   the loop
+    |
+asmr_evaluate   model library, per-participant selection
+```
+
+`asmr_models_seed` sits to the side, supplying the starting models.
+
+---
+
+# `asmr_data.py` — loading without mis-pairing anything {#sec-data}
+
+237 lines. Its whole job is to return data whose participants and trials are guaranteed to
+line up, and to **fail loudly** if they ever stop lining up.
+
+## The `Dataset` record
+
+```python
+@dataclass
+class Dataset:
+    domain:      str
+    n_dim:       int
+    ub:          float
+
+    # --- test items (ascending item ID) ---
+    item_ids:    np.ndarray          # (n_items,) int
+    item_names:  np.ndarray          # (n_items,) str
+    cues:        np.ndarray          # (n_items, n_dim)
+    true_crit:   np.ndarray          # (n_items,)
+
+    # --- exemplars ---
+    ex_ids:      np.ndarray          # (n_ex,) int
+    ex_names:    np.ndarray          # (n_ex,) str
+    ex_cues:     np.ndarray          # (n_ex, n_dim)
+    ex_crit:     np.ndarray          # (n_ex,)
+
+    # --- participants (ID_n order) ---
+    participant_ids: list            # (n_subs,) Prolific IDs, index == ID_n
+    estimates:   np.ndarray          # (n_items, n_subs) test-phase estimates
+    centaur_nll: np.ndarray          # (n_subs, n_items) nats, probability *mass*
+    pres_pos:    np.ndarray          # (n_items, n_subs) int, presentation position
+    train_est:   list                # (n_subs,) 1-D arrays of training-phase estimates
+    valid:       np.ndarray          # (n_items, n_subs) bool, False for excluded trials
+```
+
+Every comment gives the shape. `estimates` is items × participants; `centaur_nll` is
+participants × items. That asymmetry is inherited from the files and is exactly the trap
+from @sec-python — which is why the shapes are written down at the point of definition.
+
+`ub` is the domain ceiling from `configurations.py`: 10000 for Mammals, 100 for Food and
+Countries. It defines the support of the response distribution.
+
+Two computed properties:
+
+```python
+    @property
+    def n_items(self):
+        return len(self.item_ids)
+
+    @property
+    def n_subs(self):
+        return len(self.participant_ids)
+```
+
+Derived rather than stored, so they cannot fall out of sync.
+
+## `load_aligned(domain, check=True)` — the main entry point
+
+### Reading the design file
+
+```python
+    cfg      = DOMAIN_CONFIG[domain]
+    n_dim    = cfg["n_dim"]
+    cue_cols = [f"V{i}" for i in range(1, n_dim + 1)]
+```
+
+`DOMAIN_CONFIG` is reused from your existing `configurations.py`. The comprehension builds
+`["V1", "V2", ..., "V10"]`. Note `range(1, n_dim + 1)` — `range` excludes its endpoint, so
+`+ 1` is needed to reach `V10`.
+
+```python
+    design = pd.read_csv(cfg["stim"], sep=";", decimal=",")
+    train  = design.loc[design["training"] == 1]
+    test   = design.loc[design["training"] == 0].sort_values("ID")
+```
+
+`sep=";", decimal=","` because the design files are German-locale CSVs — the same reason
+your R code uses `read_csv2()`. `.loc[boolean]` is `dplyr::filter()`. The explicit
+`.sort_values("ID")` is not decorative: it is what makes "row *i*" mean "item ID rank *i*"
+everywhere downstream.
+
+### Reindexing participants by ID, not by position
+
+```python
+    nd              = _narrative(domain)
+    participant_ids = nd["ID"].tolist()
+
+    behav = pd.read_csv(cfg["data"], sep=",")
+    behav = behav[behav["training"] == 0].sort_values("ID_item")
+```
+
+`_narrative()` reads `narrative_data.csv`, filters to the domain, sorts by `participant`
+(the `ID_n` column) and asserts that it is a dense `0..n-1` range. So
+`participant_ids[i]` is the Prolific ID of participant index `i`.
+
+```python
+    # Reindex by ID_n order -- do NOT rely on the CSV column order.
+    estimates = behav[participant_ids].to_numpy(dtype=float)
+```
+
+**This one line is the fix for bug 1.** Passing a *list of column names* to `behav[...]`
+selects those columns **in the order given**, so the result is guaranteed to be in `ID_n`
+order regardless of how the CSV happens to be laid out. v1 used
+`exp_data.iloc[:, participant]`, which is positional.
+
+Before that, two guards:
+
+```python
+    assert (behav["ID_item"].to_numpy() == test["ID"].to_numpy()).all(), \
+        "design and behavioural files disagree on the set of test items"
+    missing = set(participant_ids) - set(behav.columns)
+    assert not missing, f"participants missing from the behavioural file: {sorted(missing)}"
+```
+
+`set(a) - set(b)` is R's `setdiff()`. `assert not missing` uses Python's truthiness: an
+empty set is falsy, so this reads as "assert there is nothing missing". The backslash at
+the end of the first line continues the statement (Python's `\` at end-of-line, needed
+because the condition and message straddle two lines).
+
+### Loading Centaur
+
+```python
+    centaur = torch.load(CENTAUR_PATH.format(domain=domain), weights_only=True)
+    centaur = torch.stack(centaur).float().numpy()
+    assert centaur.shape == (len(participant_ids), len(test)), (...)
+```
+
+The `.pth` file is a *list* of per-participant tensors; `torch.stack` turns it into one 2-D
+tensor, `.float()` casts to 32-bit, `.numpy()` hands it to numpy. The shape assertion
+catches a stale or half-regenerated `_TESTING_ALIGNED.pth`.
+
+### Presentation order
+
+```python
+    item_ids = test["ID"].to_numpy(dtype=int)
+    rank     = {int(i): k for k, i in enumerate(item_ids)}
+    pres_pos = np.full((len(item_ids), len(participant_ids)), -1, dtype=int)
+    for p, row in nd.iterrows():
+        order = [int(x) for x in str(row["ID_items"]).split(",")][-len(item_ids):]
+        for pos, iid in enumerate(order):
+            pres_pos[rank[iid], p] = pos
+    assert (pres_pos >= 0).all(), "some test item never appeared in ID_items"
+```
+
+Line by line:
+
+- `enumerate(item_ids)` yields `(0, 1), (1, 2), (2, 3), ...` — R's `seq_along` paired with
+  the values. `rank` maps **item ID → row index**, the lookup that replaces v1's positional
+  counting.
+- `np.full(..., -1)` pre-fills with an impossible value so the final assertion can detect
+  any cell that was never written.
+- `.split(",")` splits the `"42, 72, 80, ..."` string; the comprehension converts to `int`.
+- `[-len(item_ids):]` is a **negative slice**: "the last 68 elements". `ID_items` holds
+  training trials followed by test trials, and training blocks repeat, so counting from the
+  end is the robust way to isolate the test phase.
+- `for p, row in nd.iterrows()` iterates DataFrame rows. (Slow in general, fine for 48
+  rows.)
+
+### The guard: `assert_alignment`
+
+```python
+def assert_alignment(ds, nd=None):
+    nd = _narrative(ds.domain) if nd is None else nd
+    rank = {int(i): k for k, i in enumerate(ds.item_ids)}
+
+    for p, row in nd.iterrows():
+        assert row["ID"] == ds.participant_ids[p]
+        order = [int(x) for x in str(row["ID_items"]).split(",")][-ds.n_items:]
+        said  = re.findall(r"<<(.*?)>>", row["text"])[-ds.n_items:]
+```
+
+This independently re-derives the estimates **from the narrative text Centaur actually
+read**, then compares them to the behavioural file. If either ordering drifts, the numbers
+disagree and the load fails.
+
+`re.findall(r"<<(.*?)>>", ...)` is a regular expression. The `r"..."` prefix is a *raw
+string* (backslashes stay literal — R's equivalent of doubling them). `(.*?)` is a
+*non-greedy* capture group: without the `?` it would match from the first `<<` to the
+*last* `>>`, swallowing the whole transcript.
+
+```python
+        from_text = np.empty(ds.n_items, dtype=float)
+        for iid, val in zip(order, said):
+            from_text[rank[iid]] = float(val)
+```
+
+`zip` pairs the two lists elementwise (R's `Map`). Each response is written to the slot for
+**its item ID**, converting presentation order into item-ID order. This is the fix for
+bug 2 in miniature.
+
+### Manuscript exclusions
+
+```python
+        obs  = ds.estimates[:, p]
+        seen = np.isfinite(obs)
+
+        for i in np.flatnonzero(~seen):
+            if not from_text[i] > ds.ub:
+                raise AssertionError(...)
+```
+
+Trials the manuscript excluded (estimates above the domain ceiling) are `NaN` in
+`data_analysis_*.csv` but **still present** in `narrative_data.csv`. So Centaur was scored
+on trials excluded from your behavioural analysis. The guard accepts a `NaN` only when the
+narrative value really is out of range — a genuine exclusion — and raises otherwise.
+
+`~seen` is elementwise NOT (R's `!`). `np.flatnonzero` returns the indices where a boolean
+array is `True` — R's `which()`.
+
+::: {.callout-note}
+## What this found
+5 such trials in Food, 2 in Countries, 0 in Mammals. They are now masked out through
+`ds.valid` rather than silently fitted as `NaN`.
+:::
+
+## Running it
+
+```bash
+cd Scripts
+python asmr_data.py
+```
+
+```
+[Mammals] 48 participants x 68 test items, 12 exemplars, 10 cues -- alignment verified
+[Food] 46 participants x 68 test items, 12 exemplars, 14 cues -- alignment verified (5 excluded trials masked)
+[Countries] 48 participants x 68 test items, 12 exemplars, 10 cues -- alignment verified (2 excluded trials masked)
+```
+
+```python
+from asmr_data import load_aligned
+
+ds = load_aligned("Mammals")
+ds.n_subs, ds.n_items          # (48, 68)
+ds.cues.shape                  # (68, 10)
+ds.ex_names[:3]                # ['Red panda' 'African buffalo' 'Wart hog']
+ds.long_frame().head()         # tidy long format, one row per participant x item
+```
+
+---
+
+# `asmr_likelihood.py` — the reporting layer {#sec-likelihood}
+
+251 lines. This is the scientifically important module.
+
+## The idea
+
+A person who believes a zebra matures in about 900 days does not say "900". They say
+"900", or "1000", or "2 years". The cognitive model predicts a **latent quantity**; the
+person reports it on a **coarse grid**. Modelling only the first half and comparing against
+a model that captures both is not a fair comparison.
+
+So we add a reporting stage. With granularities
+$g \in \{1, 5, 10, 50, 100, 500, 1000\}$ and mixing weights $\pi_g$:
+
+$$
+P(y) = \sum_g \pi_g \cdot \mathbb{1}[y \equiv 0 \bmod g] \cdot P_g(y),
+\qquad
+P_g(y) = \frac{\Phi\!\left(\frac{y + g/2 - \mu}{\sigma}\right) - \Phi\!\left(\frac{y - g/2 - \mu}{\sigma}\right)}{Z_g}
+$$
+
+Read it as: *with probability $\pi_g$ the person reports to the nearest multiple of $g$;
+given that, the chance they land on $y$ is the latent distribution's mass in the bin around
+$y$.*
+
+Grid-$g$ bins tile $[-g/2,\; N_g g + g/2]$ exactly, so $Z_g$ is closed form and each $P_g$
+sums to one over its own support. With $\sum_g \pi_g = 1$ the mixture is a proper PMF —
+directly comparable to Centaur's token probability.
+
+::: {.callout-tip}
+## Why $\pi_g$ is free
+It is estimated from each participant's **training-phase** responses, so it costs **no free
+parameters** in the test-phase fit. A person's rounding habit is measured before the data
+we are modelling.
+:::
+
+## `fit_granularity_weights(train_responses, grids=GRIDS, alpha=1.0)`
+
+```python
+def coarsest_grid(y, grids=GRIDS, tol=1e-8):
+    y = np.asarray(y, dtype=float)
+    out = np.zeros(y.shape, dtype=int)
+    for k, g in enumerate(grids):
+        on = np.abs(y / g - np.round(y / g)) < tol
+        out = np.where(on, k, out)
+    return out
+```
+
+`y / g - round(y / g)` is zero exactly when `y` is a multiple of `g`; comparing to a small
+tolerance rather than `== 0` avoids floating-point trouble. Because `grids` is ordered
+coarsest-last and each iteration overwrites, `out` ends up holding the **coarsest** grid
+each value lies on. `np.where(cond, a, b)` is R's `ifelse()`, elementwise.
+
+```python
+def fit_granularity_weights(train_responses, grids=GRIDS, alpha=1.0):
+    y = np.asarray(train_responses, dtype=float)
+    y = y[np.isfinite(y)]
+    counts = np.full(len(grids), float(alpha))
+    if y.size:
+        idx = coarsest_grid(y, grids)
+        counts += np.bincount(idx, minlength=len(grids))
+    return counts / counts.sum()
+```
+
+`np.bincount` tabulates counts of each integer — R's `tabulate()`. `minlength` guarantees
+all seven slots exist even if some grid never occurs. Starting `counts` at `alpha = 1`
+is **Laplace smoothing**: no grid ever gets probability zero, which matters because a zero
+would make any test response on that grid infinitely surprising.
+
+Observed averages for Mammals:
+
+```
+grids   [1,    5,    10,   50,   100,  500,  1000]
+pi      [0.308 0.070 0.198 0.122 0.188 0.048 0.067]
+```
+
+## `_log_ndtr_diff(a, b)` — numerically stable $\log(\Phi(b) - \Phi(a))$
+
+Computing $\Phi(b) - \Phi(a)$ naively then taking the log underflows to $-\infty$ in the
+tails — and the optimiser spends a lot of time in the tails.
+
+```python
+def _log_ndtr_diff(a, b):
+    a, b = np.asarray(a, dtype=float), np.asarray(b, dtype=float)
+    lo, hi = np.minimum(a, b), np.maximum(a, b)
+
+    use_upper = (lo + hi) > 0.0
+    x_big  = np.where(use_upper, -lo, hi)
+    x_smll = np.where(use_upper, -hi, lo)
+
+    log_big  = log_ndtr(x_big)
+    log_smll = log_ndtr(x_smll)
+    ratio    = np.clip(log_smll - log_big, None, -1e-12)
+    return log_big + np.log1p(-np.exp(ratio))
+```
+
+`log_ndtr` from `scipy.special` computes $\log \Phi(x)$ accurately even at $x = -40$.
+
+The algebra: factor out the larger term,
+$$\log(\Phi(b) - \Phi(a)) = \log \Phi(b) + \log\!\left(1 - \tfrac{\Phi(a)}{\Phi(b)}\right)$$
+and compute the ratio in log space. `np.log1p(x)` is $\log(1+x)$, accurate for tiny `x`.
+
+The `use_upper` switch handles the right tail. When both bounds are far positive,
+$\Phi(a)$ and $\Phi(b)$ are both ≈ 1 and their ratio ≈ 1, so `log1p(-1)` → $-\infty$
+catastrophically. By symmetry $\Phi(b) - \Phi(a) = \Phi(-a) - \Phi(-b)$, so we flip signs
+and work in the left tail where `log_ndtr` is accurate. `(lo + hi) > 0` tests the midpoint.
+
+`np.clip(x, None, -1e-12)` caps the ratio just below zero (`None` = no lower bound),
+guarding against `log1p(0)` when rounding makes the two identical.
+
+## `grid_masks(y, ...)` — precompute what the optimiser would recompute
+
+```python
+def grid_masks(y, grids=GRIDS, tol=1e-8):
+    y = np.asarray(y, dtype=float)
+    m = np.stack([np.abs(y / g - np.round(y / g)) < tol for g in grids])
+    m[0] |= ~m.any(axis=0)
+    return m
+```
+
+Which responses lie on which grid depends only on the **data**, never on the parameters. So
+it is computed once per participant and reused across every objective evaluation — worth
+roughly a 2× speedup, because the optimiser calls the likelihood thousands of times.
+
+`m[0] |= ~m.any(axis=0)` is a safety net: `|=` is in-place OR, so any response on *no* grid
+(a non-integer estimate) is forced onto the finest grid. Without it such a response would
+have zero support and produce `NaN`.
+
+## `logpmf_reported(...)` — the PMF itself
+
+```python
+    g   = np.asarray(grids, dtype=float)[:, None]        # (G, 1)
+    loc = loc[None, :]                                   # (1, n)
+
+    half = g / 2.0
+    log_bin = _log_ndtr_diff(
+        (edge(np.maximum(y[None, :] - half, lo_support)) - loc) / sigma,
+        (edge(y[None, :] + half) - loc) / sigma,
+    )
+    log_z = _log_ndtr_diff(
+        (edge(np.maximum(-half, lo_support)) - loc) / sigma,
+        (edge(np.floor(ub / g) * g + half) - loc) / sigma,
+    )
+
+    comps = np.where(masks, log_pi[:, None] + log_bin - log_z, -np.inf)
+
+    top = comps.max(axis=0)
+    return top + np.log(np.exp(comps - top[None, :]).sum(axis=0))
+```
+
+This is broadcasting doing real work. `g` is `(7, 1)`, `loc` is `(1, n)`, so `g - loc`
+broadcasts to `(7, n)` — every grid against every trial, in one array. Both
+`_log_ndtr_diff` calls therefore happen **once** rather than once per grid.
+
+::: {.callout-note}
+## Why that matters
+The original loop-over-grids version made 14 small calls per objective evaluation. At 1744
+evaluations per participant fit, the per-call Python overhead dominated. Vectorising took a
+single-participant fit from 3.0 s to 1.4 s with identical results.
+:::
+
+- `edge` is a *lambda* (an anonymous function, R's `\(x)`) that is the identity for
+  `dist="normal"` and `np.log` for `dist="lognormal"`. Defining it once keeps the two
+  distributions on one code path.
+- `np.floor(ub / g) * g` is the largest multiple of `g` at or below the ceiling — the top
+  of grid `g`'s support.
+- `np.where(masks, ..., -np.inf)` zeroes out (in log space) every grid a response does not
+  lie on.
+- The last two lines are `logsumexp` written out: subtract the max, exponentiate, sum, take
+  the log, add the max back. Doing it inline rather than calling `scipy.special.logsumexp`
+  removed measurable overhead.
+
+### The self-test
+
+```python
+def _check_pmf_sums_to_one(ub=10000.0, grids=GRIDS, dist="normal"):
+    ...
+    lp = logpmf_reported(support, np.full(support.size, mu), sigma, pi, ub, ...)
+    worst = max(worst, abs(np.exp(lp).sum() - 1.0))
+```
+
+Enumerates the entire support and checks the probabilities sum to one. This is the check
+that the mixture is a *proper* distribution — without it, a subtle normalisation error
+would silently inflate or deflate every likelihood in the project.
+
+```bash
+python asmr_likelihood.py
+```
+
+```
+    normal: max |sum P(y) - 1| = 3.331e-16  OK
+ lognormal: max |sum P(y) - 1| = 2.220e-16  OK
+```
+
+`3e-16` is machine epsilon — exact to floating-point precision.
+
+## `predict` and `nll_reported`
+
+```python
+def predict(model_fn, theta, cues, ex_cues, ex_crit):
+    try:
+        pred = model_fn(np.asarray(theta, dtype=float), cues, ex_cues, ex_crit)
+    except Exception as exc:
+        raise ModelEvaluationError(f"{type(exc).__name__}: {exc}") from exc
+
+    pred = np.asarray(pred, dtype=float)
+    if pred.shape != (cues.shape[0],):
+        raise ModelEvaluationError(...)
+    if not np.all(np.isfinite(pred)):
+        raise ModelEvaluationError("predictions contain NaN or inf")
+    return pred
+```
+
+**This is the fix for v1's sentinel bug.** Any failure — an exception, a wrong shape, a
+`NaN` — becomes a raised `ModelEvaluationError`. It never returns a number that could be
+mistaken for a fit. `raise ... from exc` preserves the original traceback.
+
+```python
+def nll_reported(theta, model_fn, y, cues, ex_cues, ex_crit, pi, ub,
+                 sigma_scale=1.0, dist="normal", agg="sum", mask=None, masks=None):
+    theta = np.asarray(theta, dtype=float)
+    sigma = float(sigma_scale) * float(softplus(theta[-1])) + SIGMA_MIN
+    pred  = predict(model_fn, theta[:-1], cues, ex_cues, ex_crit)
+```
+
+`theta[:-1]` is everything but the last element; `theta[-1]` is the last (negative indexing
+counts from the end). The last parameter is the **hidden noise parameter** the LLM never
+sees.
+
+`softplus(x) = log(1 + exp(x))` maps any real to a positive number smoothly. Multiplying by
+`sigma_scale` — set to that participant's response SD — means `theta[-1] ≈ 0` already gives
+a sensible sigma, keeping BFGS well conditioned. v1 started sigma at `0.01`, which on the
+raw scale is an absurdly sharp distribution and a terrible starting point.
+
+---
+
+# `asmr_models_seed.py` — the model contract {#sec-models}
+
+315 lines, mostly strings. The models live as **source code strings** because they are sent
+to the LLM as text and executed by the harness.
+
+## The contract
+
+```python
+NUM_PARAMETERS = <int>
+
+def model(parameters, cues, ex_cues=None, ex_crit=None) -> pred_crit
+```
+
+Three rules, all changed from v1:
+
+1. **Return only `pred_crit`** — a 1-D array. Not `(pred_crit, sigma)`. In v1 the LLM kept
+   drifting between the two conventions; 8 of the 10 sentinel-producing generations did
+   exactly that.
+2. **Parameters are unconstrained reals of order 1.** Constraints go *inside* the function
+   (`np.exp` for positive, sigmoid for $[0,1]$, softmax for a simplex). **There is no
+   `BOUNDS` variable.** v1's LLM-authored bounds routinely went stale — one model returned
+   `np.exp(...)` while paired with `BOUNDS = [(-4, 4)] * 11`.
+3. **Predictions on the raw criterion scale**, with the scale set from `ex_crit` /
+   `ex_cues` statistics so that `parameters = 0` already predicts plausible magnitudes.
+
+## The GCM, annotated
+
+```python
+    n_dim = cues.shape[1]
+    p     = 2.0
+
+    ex_gap = np.abs(ex_cues[:, None, :] - ex_cues[None, :, :]) ** p
+    ex_gap = (ex_gap.sum(axis=-1)) ** (1.0 / p)
+    d_ref  = np.median(ex_gap[ex_gap > 0]) + 1e-9
+
+    c = np.exp(np.clip(parameters[0], -20.0, 20.0)) / d_ref
+```
+
+`d_ref` is the median pairwise distance among exemplars — a natural distance unit for this
+stimulus space. Dividing by it means `parameters[0] = 0` gives a sensitivity of
+`1 / d_ref`, i.e. "similarity falls off over about one typical exemplar spacing".
+`np.clip(..., -20, 20)` stops `np.exp` overflowing when the optimiser wanders.
+
+`axis=-1` means "the last axis" — here the cue dimension.
+
+```python
+    logits = np.concatenate([np.zeros(1), parameters[1:n_dim]])
+    w      = _softmax(logits) * n_dim
+```
+
+Attention weights, non-negative and summing to `n_dim` as the manuscript requires. The
+first logit is **pinned at zero** and only `n_dim - 1` are free — because softmax is
+invariant to adding a constant to all logits, so `n_dim` free logits would leave one
+parameter unidentified.
+
+::: {.callout-note}
+## A latent issue in the original code
+`models.py` normalised `n_dim` weights with `w / w.sum() * n_dim`, which has the same
+redundancy. `num_parameters('GCM', n_dim)` in `helper_functions_MLE_fitting.py` therefore
+over-counts the GCM by one. The v1 LLM once deleted that normalisation line outright
+(`srm_model_0p_2_iteration_3.npz`) without understanding what it was for.
+:::
+
+```python
+    diff      = np.abs(cues[:, None, :] - ex_cues[None, :, :]) ** p
+    distances = ((diff * w[None, None, :]).sum(axis=-1)) ** (1.0 / p)
+    sim       = np.exp(-c * distances)
+
+    sim_sum   = np.maximum(sim.sum(axis=1), 1e-12)
+    pred_crit = (sim * ex_crit[None, :]).sum(axis=1) / sim_sum
+```
+
+`(68, 1, 10) - (1, 12, 10)` → `(68, 12, 10)`, weight, sum over cues → `(68, 12)` distances,
+then the similarity-weighted average over exemplars → `(68,)`.
+
+::: {.callout-warning}
+## A real bug fixed here
+The original was `np.power(cues - ex_cues, p)`. For `p = 2` that happens to be correct, but
+for **odd** `p` (e.g. the city-block metric, `p = 1`) it keeps the sign and computes
+something that is not a distance at all — and can go negative, making `** (1/p)` produce
+`NaN`. `np.abs(...) ** p` is correct for any `p`.
+:::
+
+## The other seeds
+
+- **CAM** (11 parameters) — linear. `intercept = mean(ex_crit) + parameters[0] *
+  std(ex_crit)`, weights scaled by `std(ex_crit) / std(ex_cues)` so all parameters are
+  order 1.
+- **RulEx-J** (22) — `alpha * CAM + (1 - alpha) * GCM`, with `alpha` through a sigmoid.
+  Manuscript Eq. 5.
+- **MAPP** (3) — the Mapping model. Cues are recoded to correlate positively with the
+  criterion, averaged to a single value, then mapped to a typical criterion value.
+  Implemented as a **kernel (Nadaraya–Watson) regression**: the bin width becomes a
+  bandwidth. This keeps it differentiable for gradient-based fitting, at the cost of soft
+  rather than hard bins.
+- **Constant** (1) — same prediction on every trial. Uses **no information about the
+  item**, so under the shared reporting layer it is the honest "response style only" null.
+  Whatever a real model gains over this is what knowing the item buys.
+
+---
+
+# `asmr_codegen.py` — never let broken code become a number {#sec-codegen}
+
+226 lines. Text from an LLM is untrusted input; this module treats it that way.
+
+## `strip_llm_wrapping(text)`
+
+```python
+def strip_llm_wrapping(text):
+    text = text.split("</think>")[-1]
+    fences = re.findall(r"```(?:python)?\s*\n(.*?)```", text, flags=re.S)
+    if fences:
+        text = max(fences, key=len)
+    return text.strip()
+```
+
+Qwen3 emits reasoning inside `<think>...</think>`; `.split(...)[-1]` keeps everything after
+the last close tag. `(?:python)?` is a non-capturing optional group, `flags=re.S` lets `.`
+match newlines, and `max(fences, key=len)` picks the longest block if several appear.
+
+## `validate_model_code(...)` — the gate
+
+Returns a `ValidationReport` (`ok`, `source`, `num_parameters`, `model_fn`, `error`,
+`warnings`) rather than raising, so callers can decide what to do.
+
+### 1–2. Parse and check imports
+
+```python
+    try:
+        tree = ast.parse(source)
+    except SyntaxError as exc:
+        rep.error = f"SyntaxError: {exc}"
+        return rep
+```
+
+`ast` parses Python into an **abstract syntax tree** without running it — so a syntax error
+is caught before anything executes.
+
+```python
+        bad = names - ALLOWED_IMPORTS
+        if bad:
+            rep.error = f"disallowed import(s): {sorted(bad)}"
+```
+
+Only numpy/scipy/math. This is a sanity check on scope, not a security sandbox — see the
+warning below.
+
+### 3. Signature
+
+```python
+    fn_node = next((n for n in tree.body
+                    if isinstance(n, ast.FunctionDef) and n.name == "model"), None)
+```
+
+`next(generator, None)` takes the first match or `None` — R's
+`Find()`. Then:
+
+```python
+    args = [a.arg for a in fn_node.args.args]
+    if tuple(args[:4]) != REQUIRED_SIG:
+        rep.error = (f"signature must start with {REQUIRED_SIG}, got {tuple(args)}")
+```
+
+### 4. Execute in a fresh namespace
+
+```python
+    ns = {"np": np, "numpy": np}
+    try:
+        exec(compile(tree, "<llm_model>", "exec"), ns)
+    except Exception:
+        rep.error = "error while executing the module:\n" + traceback.format_exc(limit=3)
+```
+
+`exec(code, ns)` runs the code with `ns` as its globals. Passing a fresh dict means the
+model cannot see or modify the harness's variables. `"<llm_model>"` is the filename that
+appears in tracebacks.
+
+::: {.callout-warning}
+## This is not a security sandbox
+`exec` runs arbitrary code with full privileges. The import check raises the bar but does
+not seal it. This is acceptable because the code comes from a local model you control on
+your own hardware — but do not point this at untrusted input.
+:::
+
+### 5. Smoke test
+
+```python
+    outs = []
+    for scale in (1.0, 3.0):
+        for _ in range(n_draws // 2):
+            theta = rng.normal(0.0, scale, size=rep.num_parameters)
+            try:
+                pred = model_fn(theta, cues, ex_cues, ex_crit)
+            except Exception:
+                rep.error = (f"raised for parameters ~ N(0, {scale}):\n" + ...)
+                return rep
+```
+
+Twenty random parameter vectors at two scales. Every one must produce a finite array of the
+right shape. `_` as a loop variable is the convention for "I don't use this". `//` is
+integer division.
+
+```python
+            try:
+                pred = np.asarray(pred, dtype=float)
+            except Exception:
+                rep.error = ("returned something that is not a numeric array -- return "
+                             "only pred_crit, not a tuple such as (pred_crit, sigma)")
+```
+
+This catch exists because it is the single most common LLM mistake — 8 of your 10 v1
+failures.
+
+```python
+    outs = np.asarray(outs)
+    if np.allclose(outs, outs[0]):
+        rep.error = "predictions do not depend on the parameters at all"
+```
+
+Catches a model that ignores its parameters — which would fit "perfectly" in the sense that
+the optimiser converges instantly, and mean nothing.
+
+### 6. Dead parameters
+
+```python
+    idx, sliced = _indexed_parameter_slots(tree)
+    if not sliced:
+        dead = sorted(set(range(rep.num_parameters)) - {i % rep.num_parameters for i in idx})
+        if dead:
+            rep.error = (f"NUM_PARAMETERS = {rep.num_parameters} but parameter(s) {dead} "
+                         f"are never used")
+```
+
+`_indexed_parameter_slots` walks the AST for `parameters[...]` subscripts. `% rep.num_parameters`
+normalises negative indices (`parameters[-1]` → the last slot). If the model uses slices
+(`parameters[1:11]`), static analysis cannot tell what is covered, so the check is skipped
+and replaced by a runtime probe:
+
+```python
+    base = model_fn(np.zeros(rep.num_parameters), cues, ex_cues, ex_crit)
+    inert = []
+    for i in range(rep.num_parameters):
+        t = np.zeros(rep.num_parameters)
+        t[i] = 1.0
+        if np.allclose(model_fn(t, cues, ex_cues, ex_crit), base):
+            inert.append(i)
+```
+
+Perturb one parameter at a time and see whether anything changes. Reported as a **warning**
+rather than an error, because AIC already punishes an unused parameter.
+
+## Verifying the gate
+
+```bash
+python asmr_codegen.py
+```
+
+```
+--- seeds ---
+     CAM: OK   k=11
+     GCM: OK   k=10
+ RulEx-J: OK   k=22
+    MAPP: OK   k=3
+
+--- v1 generations that produced sentinel NLLs ---
+srm_model_0_run_1_iteration_1.npz : rejected  returned something that is not a numeric array
+srm_model_0p_2_iteration_3.npz    : rejected  returned something that is not a numeric array
+srm_model_1p_0_iteration_4.npz    : rejected  raised for parameters ~ N(0, 1.0)
+...
+```
+
+All four seeds pass; **all ten** v1 generations that produced `1e12` sentinels are rejected.
+
+---
+
+# `asmr_fit.py` — maximum likelihood {#sec-fit}
+
+235 lines.
+
+## `Fit` — the result record
+
+```python
+    @property
+    def aic(self):
+        """Summed over participants, each with its own parameter set (as in v1)."""
+        return 2.0 * self.k * int(self.ok.sum()) + 2.0 * self.total_nll
+
+    @property
+    def nats_per_trial(self):
+        return self.total_nll / max(self.n_valid_trials, 1)
+```
+
+`self.k` already includes the hidden sigma. `nats_per_trial` is the scale-free number worth
+watching — it is directly comparable to Centaur's 4.06.
+
+`np.nansum` / `np.isfinite` ignore the `NaN`s that mark masked trials, which is why masked
+trials cost nothing rather than poisoning the total.
+
+## `fit_one(...)` — one participant
+
+```python
+    def objective(theta):
+        try:
+            return nll_reported(theta, model_fn, y, cues, ex_cues, ex_crit, pi, ub,
+                                sigma_scale=sigma_scale, dist=dist, agg="sum",
+                                mask=mask, masks=masks)
+        except ModelEvaluationError:
+            return OBJECTIVE_PENALTY
+```
+
+A *closure* — a function defined inside another that captures the enclosing variables
+(`y`, `cues`, …). `scipy.optimize.minimize` wants a function of `theta` alone, and this is
+how you give it one without globals.
+
+::: {.callout-important}
+## `OBJECTIVE_PENALTY` is not a sentinel
+It looks like v1's `1e12`, but the difference is decisive. It is used **only inside the
+objective**, to tell the optimiser "this region is bad, go elsewhere". The reported number
+is recomputed afterwards:
+
+```python
+    if best_theta is None or best_val >= OBJECTIVE_PENALTY:
+        raise ModelEvaluationError("no restart produced a usable fit")
+
+    trial_nll = nll_reported(best_theta, ...)   # raises if still unevaluable
+```
+
+So a fit that ends in a bad region is **discarded**, never reported.
+:::
+
+```python
+    for r in range(n_restarts):
+        x0 = np.zeros(k + 1) if r == 0 else rng.normal(0.0, 1.0, size=k + 1)
+        res = minimize(objective, x0, method="BFGS", options={...})
+```
+
+The first restart starts at the origin — which the model contract defines as already
+predicting sensible magnitudes — and the rest explore. v1 used a single start at
+`abs(0.01 * randn(k+1))`, which for the GCM meant `c ≈ 0.01`: all similarities ≈ 1, so the
+prediction was the flat mean of the exemplars, every time.
+
+**BFGS, not L-BFGS-B**, because parameters are unconstrained by contract, so there are no
+bounds to enforce. This matches the ASMR paper.
+
+## Parallelism
+
+Fitting is the slow part: BFGS with **numerical** gradients needs `k+1` extra evaluations
+per gradient step (there is no analytic gradient for arbitrary LLM-written code). The 48
+per-participant fits are independent, so they parallelise perfectly.
+
+```python
+_WORKER = {}
+
+def _worker_init(source, cues, ex_cues, ex_crit):
+    from asmr_codegen import validate_model_code
+    np.seterr(over="ignore", invalid="ignore", divide="ignore")
+    rep = validate_model_code(source, cues, ex_cues, ex_crit, n_draws=2)
+    if not rep.ok:
+        raise RuntimeError(rep.error)
+    _WORKER["model_fn"] = rep.model_fn
+```
+
+::: {.callout-note}
+## Why workers get *source*, not the function
+Model functions come from `exec`, and **`exec`-created functions cannot be pickled** —
+Python's multiprocessing serialises arguments to send them between processes, and it has no
+way to reconstruct a function with no importable module. So each worker receives the source
+text and rebuilds the function once, in its own `_worker_init`. `_WORKER` is a
+module-level dict acting as per-process storage.
+:::
+
+```python
+    if n_jobs and n_jobs > 1 and source is not None:
+        import multiprocessing as mp
+        with mp.Pool(n_jobs, initializer=_worker_init,
+                     initargs=(source, ds.cues, ds.ex_cues, ds.ex_crit)) as pool:
+            results = pool.map(_worker_fit, jobs)
+    else:
+        _WORKER["model_fn"] = model_fn
+        results = [_worker_fit(j) for j in jobs]
+```
+
+`with ... as pool:` is a *context manager* — it guarantees the pool is closed even if an
+exception occurs (R's `on.exit()`). The serial branch reuses the identical worker function,
+so both paths are guaranteed to compute the same thing.
+
+Measured on the A100 node: `n_jobs=8` takes a GCM fit over all 48 participants from several
+minutes to about 34 seconds.
+
+## `crossval_ll(...)` — the honest criterion
+
+```python
+def crossval_ll(model_fn, k, ds, pis=None, dist="normal", n_folds=5, n_restarts=3,
+                seed=0, split_seed=0, n_jobs=1, source=None):
+    pis = granularity_weights(ds) if pis is None else pis
+    order = np.random.default_rng(split_seed).permutation(ds.n_items)
+    folds = np.array_split(order, n_folds)
+```
+
+The 68 test items are split into folds; the model is fitted on the rest and scored on the
+held-out fold.
+
+::: {.callout-important}
+## `split_seed` must be held constant
+This is subtle and it matters. `seed` varies the optimiser restarts; `split_seed` fixes the
+**item folds**. Re-scoring the *same* model under different fold splits moves held-out LL by
+hundreds of nats:
+
+| | held-out LL, same model, 3 repeats | spread |
+|---|---|---|
+| fold split reseeded each time | −18631, −19041, −19204 | **573** |
+| fold split fixed (`split_seed` constant) | −19108, −19129, −19162 | **55** |
+
+A 10× reduction. Without this, "did the model improve?" is partly a comparison of fold
+splits rather than of models. The pipeline passes `split_seed=run_id`, constant across a
+run's iterations.
+:::
+
+**Why cross-validation and not just AIC:** the LLM chooses its own `NUM_PARAMETERS`. It can
+lower AIC by proposing fewer parameters and raise it by proposing more, independently of
+whether the model is any good. Held-out likelihood cannot be gamed that way.
+
+---
+
+# `asmr_srm.py` — regret, selection, and the prompt {#sec-srm}
+
+307 lines. Turns the model/Centaur gap into text an LLM can act on.
+
+## `regret(fit, ds)`
+
+```python
+def regret(fit, ds):
+    d = fit.trial_nll - ds.centaur_nll
+    d[~fit.ok] = np.nan
+    return d
+```
+
+Both are `(n_subs, n_items)`. `d[~fit.ok] = np.nan` uses a boolean mask on the first axis to
+blank out participants who could not be fitted.
+
+## `format_covariates` and `residualize` — the key refinement
+
+```python
+def format_covariates(ds):
+    y   = ds.estimates.T                                   # (n_subs, n_items)
+    cov = [np.ones_like(y),
+           (y % 100 == 0).astype(float),
+           (y % 10 == 0).astype(float)]
+
+    reused = np.zeros_like(y, dtype=float)
+    for p in range(ds.n_subs):
+        v, c = np.unique(ds.estimates[ds.valid[:, p], p], return_counts=True)
+        dup  = set(v[c > 1])
+        reused[p] = [e in dup for e in ds.estimates[:, p]]
+    cov.append(reused)
+    return np.stack(cov, axis=-1)
+```
+
+Four regressors describing **how the participant wrote the number down**: an intercept,
+multiple-of-100, multiple-of-10, and whether they used that value more than once.
+
+`np.unique(..., return_counts=True)` returns values and counts (R's `table()`); `c > 1`
+finds the repeated ones. Membership testing uses a `set` because `in` on a set is constant
+time.
+
+```python
+def residualize(delta, ds):
+    cov = format_covariates(ds)
+    out = np.full_like(delta, np.nan)
+    for p in range(delta.shape[0]):
+        m = np.isfinite(delta[p])
+        if m.sum() <= cov.shape[-1]:
+            out[p, m] = delta[p, m]
+            continue
+        X, d = cov[p][m], delta[p][m]
+        beta, *_ = np.linalg.lstsq(X, d, rcond=None)
+        out[p, m] = d - X @ beta
+    return out
+```
+
+An ordinary least-squares regression of $\Delta$ on the format covariates, **within each
+participant**, keeping the residual. `np.linalg.lstsq` is `lm()`; `beta, *_ = ...` unpacks
+the first return value and discards the rest (`*_` swallows any number of extras). `@` is
+matrix multiplication.
+
+::: {.callout-tip}
+## What this buys
+| corr($\Delta$, …) | v1-style | v2 + residualised |
+|---|---|---|
+| response is a multiple of 100 | +0.47 | 0.00 |
+| participant reused this value | +0.47 | 0.00 |
+
+And on what actually matters — the trials that get selected:
+
+| selection rule | median \|log residual\| of selected trials |
+|---|---|
+| all trials (baseline) | 0.365 |
+| plain $\Delta$ | 0.682 |
+| residualised $\Delta$ | **0.861** |
+
+The LLM now sees trials where the model is 2.4× further off than typical, instead of 1.9×.
+:::
+
+## `select_points(...)`
+
+```python
+    order = ok[np.argsort(-row[ok])][:top_k_per_sub]
+    picks.extend((p, int(i), float(row[i])) for i in order)
+```
+
+`np.argsort(-x)` sorts **descending** (numpy has no `decreasing=` flag; negating is the
+idiom). Taking the top `k` **within each participant** removes any participant-specific
+offset — differences in overall fit, in response variability, in how predictable that
+person is to Centaur.
+
+The thinning block then interleaves participants by within-subject rank, so 60 points come
+from many people rather than all from the worst-fitting one.
+
+## Building the prompt
+
+Four blocks, each addressing something v1 lacked:
+
+**`exemplar_block`** — the training exemplars with names, criteria **and cue vectors**, so
+the LLM can connect names to coordinates.
+
+**`point_block`** — one line per flagged trial:
+
+```
+* Gorilla: the participant estimated 3500, the model predicted 1186, the true value is 2829.
+  cues: [ 0.07, -0.66, -0.14, ...]. Nearest exemplar: Stump-tailed macaque
+  (distance 0.38, true value 1186).
+```
+
+Compare v1: `* Item Gorilla. You estimated: 3500.` — no prediction, no true value, no cues,
+and (because of the alignment bug) usually the wrong item anyway.
+
+**`diagnostic_block`** — aggregate residual structure. This is arguably the most valuable
+addition: a list of 60 individual trials is much weaker evidence in a continuous task than
+in a binary one.
+
+```
+* mean residual over all items: +130.2
+* correlation of the residual with the distance to the nearest exemplar: +0.18
+* correlation of the residual with the true criterion value: +0.33
+* correlation of the residual with the model's own prediction: +0.24
+* mean residual for the lowest-predicted third  (model predicts  323): +64.1
+* mean residual for the middle third            (model predicts  796): +92.0
+* mean residual for the highest-predicted third (model predicts 1642): +239.1
+```
+
+Those last three lines are a textbook signature: the GCM **compresses the range**, because
+a similarity-weighted average of exemplars is pulled toward their mean. That is a
+diagnosable, fixable defect — and in testing, a model with a range-expansion term took AIC
+from 36405 to 35355.
+
+**`history_block`** — AIC and held-out LL for every iteration so far, stated with the
+explicit note that AIC charges 2 per parameter.
+
+## `check_prompt_fits(...)`
+
+```python
+def check_prompt_fits(prompt, tokenizer, max_new_tokens, max_seq_length):
+    n = len(tokenizer(prompt).input_ids)
+    if n + max_new_tokens > max_seq_length:
+        raise ValueError(...)
+    return n
+```
+
+v1 died mid-run with *input length 25902 + max_new_tokens 16384 exceeds the maximum
+sequence length of 40960*. This fails early with an actionable message. Typical v2 prompt:
+~5,600 tokens.
+
+---
+
+# `asmr_pipeline.py` — the loop {#sec-pipeline}
+
+241 lines.
+
+## Dependency injection
+
+```python
+def run(ds, seed="GCM", n_iterations=5, generate=None, tokenizer=None, run_id=0, ...):
+```
+
+`generate` is a **function passed in**, called as `generate(prompt, temperature=...)`. The
+module therefore never imports unsloth or transformers, so the whole loop can be tested
+without a GPU. `generate=None` is a dry run that stops after building the first prompt.
+
+## The iteration, in order
+
+```python
+        report = validate_model_code(source, ds.cues, ds.ex_cues, ds.ex_crit)
+        if not report.ok:
+            if best_source is None:
+                raise RuntimeError(f"the seed model itself failed validation:\n{report.error}")
+            source, rec.rolled_back = best_source, True
+            report = validate_model_code(source, ...)
+```
+
+If the seed fails, that is a bug in *our* code and should stop everything. If a *generated*
+model fails, roll back.
+
+```python
+        fit = fit_all(...)
+        cv, _ = crossval_ll(..., split_seed=run_id, ...)
+
+        improved = cv > best_score
+        if improved:
+            best_source, best_score, best_fit, best_preds = source, cv, fit, preds
+```
+
+Selection is on **held-out log-likelihood**, and the *best* model is kept, not the last.
+
+::: {.callout-important}
+## The v1 rollback bug
+v1 did this:
+
+```python
+if current_aic > (best_aic * 1.5):
+    model_string = last_valid_model_string
+    continue                     # <- skips the SRM step entirely
+```
+
+`continue` jumps to the next iteration **without building a prompt or calling the LLM**, so
+the iteration was spent re-fitting an identical model. v2 instead always builds the prompt
+from the best model so far:
+
+```python
+        prompt_source = best_source
+        prompt_fit    = best_fit
+        prompt_preds  = best_preds
+```
+:::
+
+```python
+        raw       = generate(prompt, temperature=temperature)
+        candidate = strip_llm_wrapping(raw)
+        check     = validate_model_code(candidate, ...)
+        if not check.ok:
+            raw       = generate(retry_prompt(prompt, check), temperature=temperature)
+            candidate = strip_llm_wrapping(raw)
+```
+
+One retry, with the validator's error message appended so the LLM can repair its own
+mistake. Only if that also fails does the next iteration roll back.
+
+## Persistence
+
+`_save` writes one `.npz` per iteration containing `trial_nll`, `theta`, `ok`, `delta`,
+`picks`, the full `prompt`, the `raw_output` and a JSON record. `.npz` is numpy's zipped
+multi-array format.
+
+`_write_library` appends to `library.jsonl` — one JSON object per line, deduplicated by
+`model_hash`:
+
+```python
+def model_hash(source):
+    norm = "\n".join(l.rstrip() for l in source.strip().splitlines() if l.strip())
+    return hashlib.sha1(norm.encode("utf-8")).hexdigest()[:12]
+```
+
+Blank lines and trailing whitespace are stripped before hashing, so cosmetically different
+copies of the same model collapse to one entry.
+
+## `make_generator(llm, tokenizer, max_new_tokens=8192)`
+
+```python
+    def generate(prompt, temperature=0.7):
+        out = gen([{"role": "system", "content": ""},
+                   {"role": "user", "content": prompt}],
+                  do_sample=True, temperature=temperature, top_p=0.95, top_k=20,
+                  min_p=0.0, return_full_text=False, max_new_tokens=max_new_tokens)
+        return out[0]["generated_text"]
+
+    return generate
+```
+
+A function that *returns a function* — a closure capturing `gen` and `max_new_tokens`. This
+is what lets `run()` stay ignorant of transformers.
+
+---
+
+# `asmr_evaluate.py` — individual differences without overfitting {#sec-evaluate}
+
+253 lines.
+
+## The design
+
+You raised the right concern: fitting one shared model form to everyone may hide real
+strategy differences. But discovering a **bespoke model per person** overfits badly — with
+68 trials the LLM will happily tailor a model to one person's quirks.
+
+The resolution is **model selection over a library**:
+
+1. Run ASMR several times with different seeds and starting models.
+2. Every *validated* model along the way goes into `library.jsonl`.
+3. Score every library member against every participant on **held-out items**.
+4. Assign each participant their best-scoring member.
+
+Individual differences then show up as *which model wins for whom* — the same logic as your
+manuscript's posterior model probabilities, and directly comparable to Table 2.
+
+## `per_participant_heldout(...)` and `evaluate_library(...)`
+
+`seed` fixes the folds and is identical for every library member, so the comparison is
+**paired** — the same items are held out for every model.
+
+```python
+def winner_table(scores):
+    best = scores.loc[scores.groupby("participant")["heldout_ll"].idxmax()]
+    counts = (best.groupby("name").size().sort_values(ascending=False)
+              .rename("n_participants").reset_index())
+    return best, counts
+```
+
+`groupby(...)["col"].idxmax()` gives the row *index* of the maximum within each group;
+`.loc[...]` then pulls those rows. This is `dplyr::slice_max(heldout_ll, by = participant)`.
+
+## The diagnostic functions
+
+These are the ones to run when you want to know whether the pipeline is still honest.
+
+**`response_style_summary(ds)`** — the format facts:
+
+```
+                           split    share  centaur_nll_yes  centaur_nll_no
+                  multiple of 10 0.808517         3.551006        6.186615
+                 multiple of 100 0.475490         2.976797        5.033734
+value reused by that participant 0.648284         3.079579        5.854835
+```
+
+**`reference_rows(ds)`** — Centaur at 4.056, and the in-sample entropy of each
+participant's own responses at 3.300 (labelled optimistic, because it is in-sample).
+
+**`regret_diagnostics(delta, ds, preds)`** — is $\Delta$ tracking misfit or formatting? Pass
+`preds` to get the correlation with the model's own residual, which is the quantity SRM is
+supposed to select on.
+
+::: {.callout-note}
+## Note on `_reused_mask`
+Both `response_style_summary` and `regret_diagnostics` flatten in **(participant, item)**
+order via `ds.valid.T`, matching `centaur_nll`. This is the trap from @sec-python; the
+comment in the source says so explicitly, because getting it wrong produces plausible
+numbers rather than an error.
+:::
+
+---
+
+# Running the pipeline {#sec-running}
+
+## Module self-tests — no GPU needed
+
+```bash
+cd Scripts
+python asmr_data.py        # alignment guard, all three domains
+python asmr_likelihood.py  # PMF sums to 1, granularity weights
+python asmr_codegen.py     # seeds validate, v1 failures rejected
+python asmr_evaluate.py Mammals   # response-format diagnostics
+```
+
+## The notebook
+
+`ASMR_v2.ipynb`, in order:
+
+1. **Load and verify** — `load_aligned`, format summary, reference points.
+2. **Sanity-check the reporting layer** — fit each seed model.
+3. **Dry run** — builds the real prompt with `generate=None`. No GPU.
+4. **Load Qwen3-32B.**
+5. **Run the chains.**
+6. **Evaluate the library.**
+7. **Regret diagnostics** on the final model.
+
+::: {.callout-important}
+## The checkpoint in section 2
+Expected on Mammals:
+
+| model | nats/trial |
+|---|---|
+| Constant (ignores the item) | 5.84 |
+| GCM | 5.47 |
+| CAM | 5.31 |
+| RulEx-J | 5.10 |
+| **Centaur** | **4.06** |
+| *(v1 continuous density, for contrast)* | *7.63* |
+
+If the GCM does not land near 5.4–5.5, something is wrong with the granularity weights.
+**Stop and fix that before loading the LLM** — running the chains on a broken likelihood
+just burns your allocation.
+:::
+
+Note that `dist="lognormal"` is *worse* on every seed model (GCM 6.38 vs 5.47), so
+`"normal"` is the default despite the wide criterion range. Weber-style proportional noise
+is not what these data want once granularity is modelled.
+
+## Cost
+
+Per `fit_all` over 48 participants with `n_jobs=8`: roughly 10 s (Constant) to 120 s
+(RulEx-J). `crossval_ll` multiplies that by `n_folds`. A five-iteration chain with
+five-fold CV is on the order of 20–40 minutes plus generation time.
+
+---
+
+# Extending it {#sec-extending}
+
+## A new domain
+
+`Food` and `Countries` already work. You need:
+
+1. An entry in `DOMAIN_CONFIG` (already present for all three).
+2. An aligned Centaur file, `log_likelihood_<Domain>_TESTING_ALIGNED.pth`.
+3. An entry in `asmr_srm.DOMAIN_TEXT` (all three present) giving `criterion`, `unit` and
+   `objects` — the phrases that go into the prompt.
+
+```python
+ds = load_aligned("Food")     # 14 cue dimensions, ub = 100
+```
+
+The seeds read `n_dim` from `cues.shape[1]`, so CAM and RulEx-J need their
+`NUM_PARAMETERS` adjusted for a 14-dimensional domain (CAM: `1 + 14 = 15`).
+
+::: {.callout-warning}
+`GRIDS` is tuned for Mammals, where the criterion runs to 10000. For Food and Countries
+(ceiling 100) the coarse grids 500 and 1000 lie outside the support and just absorb
+smoothing mass. Consider `GRIDS = (1, 5, 10, 25, 50)` for those domains.
+:::
+
+## A new seed model
+
+Write it as a string following the contract, add it to `SEED_MODELS`, and validate:
+
+```python
+MODEL_MINE = PREAMBLE + '''
+NUM_PARAMETERS = 2
+
+def model(parameters, cues, ex_cues=None, ex_crit=None):
+    """Compute predicted criterion estimate."""
+    mu    = np.mean(ex_crit)
+    scale = np.std(ex_crit)
+    d     = np.linalg.norm(cues[:, None, :] - ex_cues[None, :, :], axis=-1)
+    near  = d.min(axis=1)
+    return mu + parameters[0] * scale + parameters[1] * scale * near
+'''
+
+SEED_MODELS["Nearest"] = MODEL_MINE
+```
+
+```python
+from asmr_codegen import validate_model_code
+rep = validate_model_code(MODEL_MINE, ds.cues, ds.ex_cues, ds.ex_crit)
+print(rep.ok, rep.num_parameters, rep.error)
+```
+
+Always validate before running — it catches the shape, dead-parameter and finiteness
+mistakes in seconds.
+
+## The response-perseveration extension
+
+The largest remaining gap. Centaur is **autoregressive over the participant's own answer
+history**, so it exploits the fact that 46% of test responses repeat a value that person
+already gave. A cognitive model predicting one quantity per item structurally cannot.
+
+Residual evidence: after residualising, corr($\Delta$, reused) is driven to 0 by
+construction, but before residualising it is +0.21 — that is real, unmodelled structure.
+
+`ds.pres_pos` preserves the presentation order needed to build this. A model would need
+access to the responses given *before* the current trial, which means extending the model
+contract beyond `(parameters, cues, ex_cues, ex_crit)`. That is a deliberate scope
+increase, not a small edit — but it is the obvious next scientific step, and arguably a
+finding in its own right.
+
+## A different response distribution
+
+`logpmf_reported` already switches on `dist`. Adding a third would mean defining `loc`,
+`edge` and `lo_support` for it in that function. The `_check_pmf_sums_to_one` self-test
+should be run for any new one.
+
+---
+
+# Troubleshooting {#sec-trouble}
+
+**`FileNotFoundError: '../Data/...'`**
+: Not running from `Scripts/`. All paths are relative.
+
+**`NameError: name 'make_generator' is not defined`**
+: Notebook cells run out of order. Section 1's import cell has not executed. The
+  model-loading cell now imports it itself, but sections 5–7 still need `ds`, `pis` and
+  `N_JOBS` from sections 1–2.
+
+**`AssertionError: ALIGNMENT BROKEN for participant ...`**
+: The guard is doing its job. Either `narrative_data.csv` was regenerated without
+  re-running `extract_nll_testing_phase_only.py`, or the behavioural file changed. Do not
+  disable the check — the whole point is that this failure is silent otherwise.
+
+**`AssertionError: Centaur NLL shape (...) != (...)`**
+: Stale `_TESTING_ALIGNED.pth`. Re-run `extract_nll_testing_phase_only.py` with the right
+  `DOMAIN` (note that script has a hardcoded `DOMAIN = "Food"` at the top).
+
+**`RuntimeError: the seed model itself failed validation`**
+: A bug in `asmr_models_seed.py`, not in the LLM output. Run `python asmr_codegen.py` for
+  the specific error.
+
+**`ModelEvaluationError: no restart produced a usable fit`**
+: Every restart landed in a region where the model is unevaluable. Usually a generated
+  model with a genuine pathology; the loop rolls back. If a *seed* does this, check
+  `sigma_scale` and whether predictions are on the raw scale.
+
+**Held-out LL jumps by hundreds of nats between iterations of the same model**
+: `split_seed` is varying. It must be constant within a run.
+
+**`nats_per_trial` near 7.6 instead of 5.5**
+: The reporting layer is not active — check that `pis` is being passed and that
+  `ds.train_est` is non-empty for your participants.
+
+**Parallel fitting hangs or errors**
+: Set `n_jobs=1` to confirm it is the parallelism. Remember `source=` must be passed
+  alongside `n_jobs>1`; without it `fit_all` silently falls back to serial.
+
+**Overflow warnings from `<llm_model>`**
+: Generated models exploring extreme parameters. Harmless — `np.seterr(over="ignore")` is
+  set in workers. The seeds clip their exponents to `[-20, 20]` for this reason.
+
+---
+
+# Appendix: file map {#sec-appendix}
+
+| File | Lines | Role |
+|---|---|---|
+| `asmr_data.py` | 237 | alignment-safe loading, `Dataset`, the guard |
+| `asmr_likelihood.py` | 251 | granularity reporting layer, NLL, `ModelEvaluationError` |
+| `asmr_codegen.py` | 226 | parse, sandbox, validate LLM code |
+| `asmr_models_seed.py` | 315 | CAM, GCM, RulEx-J, MAPP, Constant |
+| `asmr_fit.py` | 235 | MLE, restarts, parallelism, cross-validation |
+| `asmr_srm.py` | 307 | regret, residualisation, selection, prompt |
+| `asmr_pipeline.py` | 241 | the loop, persistence, library |
+| `asmr_evaluate.py` | 253 | library scoring, winner table, diagnostics |
+| `ASMR_v2.ipynb` | — | driver notebook |
+
+The v1 files — `ASMR.ipynb`, `models_mammals.py`, `models.py`,
+`helper_functions_MLE_fitting.py` — are untouched and still runnable.
+
+## References
+
+Binz, M., Jagadish, A. K., Rmus, M., & Schulz, E. (2025). *Automated scientific
+minimization of regret.* arXiv:2505.17661.
+
+Binz, M., et al. (2025). *A foundation model to predict and capture human cognition.*
+
+Izydorczyk, D., & Bröder, A. *An Application of Established Computational Models of
+Estimation in Three Real-World Domains.* (`Literature/Manuscript.pdf`)
