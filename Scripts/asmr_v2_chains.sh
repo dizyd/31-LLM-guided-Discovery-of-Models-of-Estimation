@@ -27,7 +27,13 @@ LLM=${LLM:-unsloth/Qwen3-32B-bnb-4bit}
 # Check with `module avail devel/cuda` which CUDA versions this cluster offers.
 module purge
 module load devel/cuda/12.8
-source "$HOME/ASMR/bin/activate"
+VENV=${VENV:-$HOME/ASMR}
+if [[ ! -f "$VENV/bin/activate" ]]; then
+    echo "virtualenv not found: $VENV/bin/activate (HOME=$HOME, host=$(hostname))" >&2
+    exit 1
+fi
+source "$VENV/bin/activate"
+echo "python: $(command -v python)"
 # ... or, if the environment is a conda one:
 # module load devel/miniforge
 # conda activate asmr

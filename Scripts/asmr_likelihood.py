@@ -95,8 +95,14 @@ def _log_ndtr_diff(a, b):
 
     log_big  = log_ndtr(x_big)
     log_smll = log_ndtr(x_smll)
-    ratio    = np.clip(log_smll - log_big, None, -1e-12)
-    return log_big + np.log1p(-np.exp(ratio))
+    ratio    = log_smll - log_big
+    # ratio >= 0 means the two tails are numerically identical (the interval carries no
+    # representable mass): the answer is log(0), not log_big + log(1e-12) as an old clip
+    # produced, which let a model with mu ~ 1e30 score log-probabilities > 0. A nan ratio
+    # (inf - inf, from a non-finite mu) is treated the same way.
+    with np.errstate(invalid='ignore', divide='ignore'):
+        out = log_big + np.log1p(-np.exp(np.minimum(ratio, 0.0)))
+    return np.where(np.isfinite(ratio) & (ratio < 0.0), out, -np.inf)
 
 
 def grid_masks(y, grids=GRIDS, tol=1e-8):
@@ -164,10 +170,14 @@ def logpmf_reported(y, mu, sigma, pi, ub, grids=GRIDS, dist="normal", tol=1e-8,
         (edge(np.floor(ub / g) * g + half) - loc) / sigma,
     )
 
-    comps = np.where(masks, log_pi[:, None] + log_bin - log_z, -np.inf)
+    # A component whose normaliser is -inf has no representable mass on the support at all;
+    # drop it instead of forming -inf - (-inf).
+    comps = np.where(masks & np.isfinite(log_z), log_pi[:, None] + log_bin - log_z, -np.inf)
 
     top = comps.max(axis=0)
-    return top + np.log(np.exp(comps - top[None, :]).sum(axis=0))
+    with np.errstate(invalid='ignore'):
+        out = top + np.log(np.exp(comps - top[None, :]).sum(axis=0))
+    return np.where(np.isfinite(top), out, -np.inf)
 
 
 # ------------------------------------------------------------------------ NLL wrapper
@@ -216,6 +226,9 @@ def nll_reported(theta, model_fn, y, cues, ex_cues, ex_crit, pi, ub,
 
     if not np.all(np.isfinite(out[m])):
         raise ModelEvaluationError("non-finite log-likelihood")
+    if np.any(out[m] < -1e-9):
+        # A log PMF cannot be positive; this only happens when the normaliser lost precision.
+        raise ModelEvaluationError("log-likelihood > 0: predictions far outside the response range")
     return float(out[m].sum()) if agg == "sum" else out
 
 

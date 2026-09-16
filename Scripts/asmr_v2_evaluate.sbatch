@@ -35,7 +35,13 @@ DOMAIN=${DOMAIN:-Mammals}
 # --------------------------------------------------------------- environment
 # EDIT ME -- keep this in sync with asmr_v2_chains.sbatch (no CUDA needed here).
 module purge
-source "$HOME/ASMR/bin/activate"
+VENV=${VENV:-$HOME/ASMR}
+if [[ ! -f "$VENV/bin/activate" ]]; then
+    echo "virtualenv not found: $VENV/bin/activate (HOME=$HOME, host=$(hostname))" >&2
+    exit 1
+fi
+source "$VENV/bin/activate"
+echo "python: $(command -v python)"
 
 export OMP_NUM_THREADS=1
 export MKL_NUM_THREADS=1
