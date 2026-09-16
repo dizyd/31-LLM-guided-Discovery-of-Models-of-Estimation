@@ -1,0 +1,36 @@
+  prompt = (
+            "I am studying human behavior in an estimation experiment.\n"
+            "In this experiment, participants estimate the number of days until female maturity for various mammals.\n\n"
+            "Experiment Structure:\n"
+            "1. Training Phase: Participants repeatedly estimated the maturity days for 12 specific exemplar mammals. "
+            "After each estimate, they received immediate feedback showing the true value.\n"
+            "The 12 learned training exemplars and their true values are: Red panda (true value: 550), African buffalo (true value: 1475), Wart hog (true value: 578), "
+            "Tiger (true value: 1268), Bottlenosed dolphin (true value: 2831), Western gray kangaroo (true value: 670), Sugar glider (true value: 236), Stump-tailed macaque (true value: 1186), "
+            "Slender loris (true value: 380), African bush elephant (true value: 4018), Nutria (true value: 152), Eurasian red squirrel (true value: 296)\n\n"
+            "2. Testing Phase: Participants estimated the maturity days for 80 mammals in a randomized order without any feedback.\n\n"
+            
+            "Feature Representation (CRITICAL):\n"
+            "The 10 numerical features for each mammal in the `cues` matrix are continuous coordinates derived from a Multi-Dimensional Scaling (MDS) analysis of human similarity judgments. "
+            "This means the features represent a psychological spatial map: animals that humans perceive as highly similar are located close to each other in this 10-dimensional space.\n\n"
+            
+            "I have the following computational model that is currently my best guess for how this participant made estimates in this experiment:\n"
+        )
+        
+        prompt += model_string
+        prompt += '\n\nThis model does capture human behavior reasonably well overall, but there are the following data points where it fails dramatically compared to a baseline model:\n\n'
+        prompt += srm_string
+        
+
+        prompt += (
+            '\n\nCan you suggest an improved model that is able to capture human behavior in the listed situations?\n'
+            'Please structure your answer as follows:\n'
+            '* CRITICAL: Keep the function signature exactly the same (`def model(parameters, cues, ex_cues=None, ex_crit=None):`).\n'
+            '* CRITICAL: You are encouraged to COMPLETELY REWRITE the internal mathematical logic of the function. Do not just tweak the linear equation.\n'
+            '* Ensure that EVERY parameter defined in NUM_PARAMETERS is explicitly sliced and used in the code.\n'
+            '* State the number of free parameters before the model function using the NUM_PARAMETERS variable.\n'
+            '* State the bounds of the free parameters before the model function using the BOUNDS variable.\n'
+            '* Do not change the docstring.\n'
+            '* Output ONLY valid, executable Python code. Do not wrap the code in markdown blocks (e.g., no ```python or ```).\n'
+            '* Do not write any text besides the code and do not elaborate any further.'
+        )
+        

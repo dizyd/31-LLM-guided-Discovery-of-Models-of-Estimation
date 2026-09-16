@@ -4,8 +4,14 @@ from scipy.stats import truncnorm
 from scipy.stats import norm
 from scipy.optimize import minimize
 import numpy.random as rng
+from scipy.special import log_ndtr
+
 
 from configurations import DOMAIN_CONFIG, OPTIM_CONFIG
+
+GRIDS      = (1.0, 5.0, 10.0, 50.0, 100.0, 500.0, 1000.0)
+SIGMA_MIN  = 1e-6
+_LOG_EPS   = -700.0
 
 def load_data(domain):
     """
@@ -172,6 +178,25 @@ def nll_truncnorm_woS(parameters, model_fn, x, cues, ex_cues, ex_crit, agg='sum'
         return -logpdf.sum()
     return -logpdf
 
+# with grid response 
+def nll_truncnorm_woS_grid(parameters, model_fn, x, cues, ex_cues, ex_crit, pi, ub, agg='sum'):
+    # The last parameter is ALWAYS the hidden sigma. The LLM never knows about it.
+    model_params = parameters[:-1]
+    sigma        = abs(parameters[-1])
+    
+    try:
+        # The LLM model now ONLY returns the predictions
+        pred_crit = model_fn(model_params, cues, ex_cues, ex_crit)
+    except Exception:
+        return 1e12 if agg == 'sum' else np.full(len(x), 1e12)
+
+    # Calculate logpdf normally using our hidden sigma
+    logp = logpmf_reported(x, pred_crit, sigma, pi, ub)
+    logp = np.clip(logp, -1e12, None)         # guard -inf
+
+    if agg == 'sum':
+        return -logp.sum()
+    return -logp
 
 
 def fit_participant(x, model_name, model_fn, cues, ex_cues, ex_crit, n_dim, ub, inits_fn, optim_config=OPTIM_CONFIG):
@@ -231,3 +256,120 @@ def fit_participant(x, model_name, model_fn, cues, ex_cues, ex_crit, n_dim, ub, 
     trial_nll = nll_truncnorm(best_params, model_fn, x, cues, ex_cues, ex_crit, ub, 'none')
     return best_params, best_nll, trial_nll
 
+
+
+
+def coarsest_grid(y, grids=GRIDS, tol=1e-8):
+    """Index of the coarsest grid in ``grids`` that ``y`` lies on."""
+    y = np.asarray(y, dtype=float)
+    out = np.zeros(y.shape, dtype=int)
+    for k, g in enumerate(grids):
+        on = np.abs(y / g - np.round(y / g)) < tol
+        out = np.where(on, k, out)
+    return out
+
+
+def fit_granularity_weights(train_responses, grids=GRIDS, alpha=1.0):
+    """Fit ``pi_g`` from a participant's training-phase responses.
+
+    Each response is assigned to the coarsest grid it lies on and the counts are
+    Laplace-smoothed. Fitted on training data only, so these are not free parameters of
+    the test-phase fit. Falls back to a smoothing-only prior when a participant has no
+    usable training responses.
+    """
+    y = np.asarray(train_responses, dtype=float)
+    y = y[np.isfinite(y)]
+    counts = np.full(len(grids), float(alpha))
+    if y.size:
+        idx = coarsest_grid(y, grids)
+        counts += np.bincount(idx, minlength=len(grids))
+    return counts / counts.sum()
+
+
+
+def _log_ndtr_diff(a, b):
+    """log(Phi(b) - Phi(a)) for b >= a, numerically stable in both tails."""
+    a, b = np.asarray(a, dtype=float), np.asarray(b, dtype=float)
+    lo, hi = np.minimum(a, b), np.maximum(a, b)
+
+    # Lower-tail form where the mass sits left of zero, upper-tail form otherwise;
+    # this keeps the subtracted ratio away from 1.
+    use_upper = (lo + hi) > 0.0
+    x_big  = np.where(use_upper, -lo, hi)
+    x_smll = np.where(use_upper, -hi, lo)
+
+    log_big  = log_ndtr(x_big)
+    log_smll = log_ndtr(x_smll)
+    ratio    = np.clip(log_smll - log_big, None, -1e-12)
+    return log_big + np.log1p(-np.exp(ratio))
+
+
+def grid_masks(y, grids=GRIDS, tol=1e-8):
+    """``(n_grids, n)`` membership masks: which responses lie on which grid.
+
+    These depend only on the data, so they are computed once per participant and reused
+    across every objective evaluation instead of being recomputed inside the optimiser
+    loop.
+    """
+    y = np.asarray(y, dtype=float)
+    m = np.stack([np.abs(y / g - np.round(y / g)) < tol for g in grids])
+    # A response on no grid at all (a non-integer estimate) would leave the mixture with
+    # no support. Treat it as lying on the finest grid.
+    m[0] |= ~m.any(axis=0)
+    return m
+
+
+def logpmf_reported(y, mu, sigma, pi, ub, grids=GRIDS, dist="normal", tol=1e-8,
+                    masks=None):
+    """Log PMF of the reported response ``y`` under the granularity mixture.
+
+    Parameters
+    ----------
+    y     : (n,)  observed responses
+    mu    : (n,)  model predictions on the raw criterion scale
+    sigma : float positive noise scale (on the raw scale, or on the log scale when
+            ``dist="lognormal"``)
+    pi    : (n_grids,) granularity weights, summing to one
+    ub    : float upper bound of the response support
+    dist  : "normal" (constant absolute noise) or "lognormal" (Weber-style
+            proportional noise, appropriate when responses span orders of magnitude)
+    """
+    y     = np.asarray(y, dtype=float)
+    mu    = np.asarray(mu, dtype=float)
+    sigma = max(float(sigma), SIGMA_MIN)
+    pi    = np.asarray(pi, dtype=float)
+
+    log_pi = np.where(pi > 0, np.log(np.maximum(pi, 1e-300)), _LOG_EPS)
+    masks  = grid_masks(y, grids, tol) if masks is None else masks
+
+    if dist == "lognormal":
+        loc = np.log(np.maximum(mu, 1e-6))
+        edge = lambda v: np.log(np.maximum(v, 1e-6))          # noqa: E731
+        lo_support = 1e-6
+    elif dist == "normal":
+        loc = mu
+        edge = lambda v: v                                    # noqa: E731
+        lo_support = -np.inf
+    else:
+        raise ValueError(f"unknown dist {dist!r}")
+
+    # Everything is evaluated for all grids at once: with only a handful of grids and
+    # trials the arrays are tiny, and two vectorised `_log_ndtr_diff` calls are far
+    # cheaper than 2 per grid inside a Python loop (this is the optimiser's hot path).
+    g   = np.asarray(grids, dtype=float)[:, None]        # (G, 1)
+    loc = loc[None, :]                                   # (1, n)
+
+    half = g / 2.0
+    log_bin = _log_ndtr_diff(
+        (edge(np.maximum(y[None, :] - half, lo_support)) - loc) / sigma,
+        (edge(y[None, :] + half) - loc) / sigma,
+    )
+    log_z = _log_ndtr_diff(
+        (edge(np.maximum(-half, lo_support)) - loc) / sigma,
+        (edge(np.floor(ub / g) * g + half) - loc) / sigma,
+    )
+
+    comps = np.where(masks, log_pi[:, None] + log_bin - log_z, -np.inf)
+
+    top = comps.max(axis=0)
+    return top + np.log(np.exp(comps - top[None, :]).sum(axis=0))

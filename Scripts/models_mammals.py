@@ -1,7 +1,7 @@
 model_string_CAM = '''
 
 NUM_PARAMETERS = 11
-BOUNDS         = [(-4, 4)] * (10 + 1) 
+BOUNDS         = [(-5000, 5000)] * (10 + 1) 
 
 def model(parameters, cues, ex_cues=None, ex_crit=None):
     """
