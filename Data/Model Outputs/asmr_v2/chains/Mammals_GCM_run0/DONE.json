@@ -1,0 +1,12 @@
+{
+  "tag": "Mammals_GCM_run0",
+  "domain": "Mammals",
+  "seed": "GCM",
+  "run_id": 0,
+  "n_iterations": 5,
+  "dry_run": false,
+  "best_cv_ll": -20243.15527154954,
+  "n_models": 5,
+  "seconds": 4234.017643690109,
+  "slurm_job": "6978045"
+}

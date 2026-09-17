@@ -26,8 +26,15 @@ LLM=${LLM:-unsloth/Qwen3-32B-bnb-4bit}
 # your JupyterHub kernel already has (unsloth, transformers, torch, scipy, pandas).
 # Check with `module avail devel/cuda` which CUDA versions this cluster offers.
 module purge
-module load devel/cuda/12.8
-source "$HOME/venvs/asmr/bin/activate"
+module load jupyter/ai/2026-03-06
+VENV=${VENV:-$HOME/ASMR}
+if [[ ! -f "$VENV/bin/activate" ]]; then
+    echo "virtualenv not found: $VENV/bin/activate (HOME=$HOME, host=$(hostname))" >&2
+    exit 1
+fi
+source "$VENV/bin/activate"
+echo "python: $(command -v python)"
+python -c "import numpy, torch, unsloth; print('numpy', numpy.__version__, 'torch', torch.__version__, 'cuda', torch.cuda.is_available())"
 # ... or, if the environment is a conda one:
 # module load devel/miniforge
 # conda activate asmr
