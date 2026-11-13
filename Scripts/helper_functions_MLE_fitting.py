@@ -208,6 +208,33 @@ def nll_truncnorm_woS_grid(parameters, model_fn, x, cues, ex_cues, ex_crit, pi, 
     return -logp
 
 
+NOISE_DISTS = ("normal", "lognormal")
+
+def nll_reported(parameters, model_fn, x, cues, ex_cues, ex_crit, pi, ub, agg='sum'):
+    """NLL of responses x under an LLM model that returns (pred_crit, noise).
+
+    noise = {"dist": "normal" | "lognormal", "scale": float or (n_trials,) array > 0}.
+    The granularity layer (pi, grids) stays in the harness; the LLM owns the latent
+    estimate and the noise family / scale. Any malformed output is a crash (sentinel).
+    """
+    sentinel = 1e12 if agg == 'sum' else np.full(len(x), 1e12)
+    try:
+        pred, noise = model_fn(parameters, cues, ex_cues, ex_crit)
+        dist  = str(noise["dist"])
+        scale = np.broadcast_to(np.asarray(noise["scale"], dtype=float), (len(x),)).copy()
+        pred  = np.asarray(pred, dtype=float)
+    except Exception:
+        return sentinel
+    if (dist not in NOISE_DISTS or pred.shape != x.shape
+            or not np.all(np.isfinite(pred)) or not np.all(np.isfinite(scale)) or np.any(scale <= 0)):
+        return sentinel
+    logp = logpmf_reported(x, pred, scale, pi, ub, dist=dist)
+    if np.any(logp > 1e-9):
+        return sentinel
+    logp = np.clip(logp, -1e12, None)
+    return -logp.sum() if agg == 'sum' else -logp
+
+
 def fit_participant(x, model_name, model_fn, cues, ex_cues, ex_crit, n_dim, ub, inits_fn, optim_config=OPTIM_CONFIG):
     """
     Fit a single participant's estimates via MLE with multiple random restarts.
@@ -351,7 +378,10 @@ def logpmf_reported(y, mu, sigma, pi, ub, grids=GRIDS, dist="normal", tol=1e-8,
     """
     y     = np.asarray(y, dtype=float)
     mu    = np.asarray(mu, dtype=float)
-    sigma = max(float(sigma), SIGMA_MIN)
+    #sigma = max(float(sigma), SIGMA_MIN)
+    sigma = np.maximum(np.asarray(sigma, dtype=float), SIGMA_MIN)
+    if sigma.ndim == 1:
+        sigma = sigma[None, :]            # per-trial scale, broadcasts against (G, n)
     pi    = np.asarray(pi, dtype=float)
 
     log_pi = np.where(pi > 0, np.log(np.maximum(pi, 1e-300)), _LOG_EPS)

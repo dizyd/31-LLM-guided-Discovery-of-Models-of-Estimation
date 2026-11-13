@@ -179,24 +179,60 @@ def nll_truncnorm_woS(parameters, model_fn, x, cues, ex_cues, ex_crit, agg='sum'
     return -logpdf
 
 # with grid response 
-def nll_truncnorm_woS_grid(parameters, model_fn, x, cues, ex_cues, ex_crit, pi, ub, agg='sum'):
+def nll_truncnorm_woS_grid(parameters, model_fn, x, cues, ex_cues, ex_crit, pi, ub, agg='sum',
+                           dist='normal'):
     # The last parameter is ALWAYS the hidden sigma. The LLM never knows about it.
     model_params = parameters[:-1]
     sigma        = abs(parameters[-1])
-    
+    sentinel     = 1e12 if agg == 'sum' else np.full(len(x), 1e12)
+
     try:
         # The LLM model now ONLY returns the predictions
-        pred_crit = model_fn(model_params, cues, ex_cues, ex_crit)
+        pred_crit = np.asarray(model_fn(model_params, cues, ex_cues, ex_crit), dtype=float)
     except Exception:
-        return 1e12 if agg == 'sum' else np.full(len(x), 1e12)
+        return sentinel
+    # Overflowing predictions (e.g. exp of a large linear term) are not a fit, they are a crash.
+    if pred_crit.shape != x.shape or not np.all(np.isfinite(pred_crit)):
+        return sentinel
 
     # Calculate logpdf normally using our hidden sigma
-    logp = logpmf_reported(x, pred_crit, sigma, pi, ub)
+    logp = logpmf_reported(x, pred_crit, sigma, pi, ub, dist=dist)
+    # A log PMF can never be positive; if it is, the normaliser lost precision (mu far outside
+    # the response range). Report that as a crash rather than as a spuriously good fit.
+    if np.any(logp > 1e-9):
+        return sentinel
     logp = np.clip(logp, -1e12, None)         # guard -inf
 
     if agg == 'sum':
         return -logp.sum()
     return -logp
+
+
+NOISE_DISTS = ("normal", "lognormal")
+
+def nll_reported(parameters, model_fn, x, cues, ex_cues, ex_crit, pi, ub, agg='sum'):
+    """NLL of responses x under an LLM model that returns (pred_crit, noise).
+
+    noise = {"dist": "normal" | "lognormal", "scale": float or (n_trials,) array > 0}.
+    The granularity layer (pi, grids) stays in the harness; the LLM owns the latent
+    estimate and the noise family / scale. Any malformed output is a crash (sentinel).
+    """
+    sentinel = 1e12 if agg == 'sum' else np.full(len(x), 1e12)
+    try:
+        pred, noise = model_fn(parameters, cues, ex_cues, ex_crit)
+        dist  = str(noise["dist"])
+        scale = np.broadcast_to(np.asarray(noise["scale"], dtype=float), (len(x),)).copy()
+        pred  = np.asarray(pred, dtype=float)
+    except Exception:
+        return sentinel
+    if (dist not in NOISE_DISTS or pred.shape != x.shape
+            or not np.all(np.isfinite(pred)) or not np.all(np.isfinite(scale)) or np.any(scale <= 0)):
+        return sentinel
+    logp = logpmf_reported(x, pred, scale, pi, ub, dist=dist)
+    if np.any(logp > 1e-9):
+        return sentinel
+    logp = np.clip(logp, -1e12, None)
+    return -logp.sum() if agg == 'sum' else -logp
 
 
 def fit_participant(x, model_name, model_fn, cues, ex_cues, ex_crit, n_dim, ub, inits_fn, optim_config=OPTIM_CONFIG):
@@ -300,8 +336,14 @@ def _log_ndtr_diff(a, b):
 
     log_big  = log_ndtr(x_big)
     log_smll = log_ndtr(x_smll)
-    ratio    = np.clip(log_smll - log_big, None, -1e-12)
-    return log_big + np.log1p(-np.exp(ratio))
+    ratio    = log_smll - log_big
+    # ratio >= 0 means the two tails are numerically identical (the interval carries no
+    # representable mass): the answer is log(0), not log_big + log(1e-12) as an old clip
+    # produced, which let a model with mu ~ 1e30 score log-probabilities > 0. A nan ratio
+    # (inf - inf, from a non-finite mu) is treated the same way.
+    with np.errstate(invalid='ignore', divide='ignore'):
+        out = log_big + np.log1p(-np.exp(np.minimum(ratio, 0.0)))
+    return np.where(np.isfinite(ratio) & (ratio < 0.0), out, -np.inf)
 
 
 def grid_masks(y, grids=GRIDS, tol=1e-8):
@@ -336,7 +378,10 @@ def logpmf_reported(y, mu, sigma, pi, ub, grids=GRIDS, dist="normal", tol=1e-8,
     """
     y     = np.asarray(y, dtype=float)
     mu    = np.asarray(mu, dtype=float)
-    sigma = max(float(sigma), SIGMA_MIN)
+    #sigma = max(float(sigma), SIGMA_MIN)
+    sigma = np.maximum(np.asarray(sigma, dtype=float), SIGMA_MIN)
+    if sigma.ndim == 1:
+        sigma = sigma[None, :]            # per-trial scale, broadcasts against (G, n)
     pi    = np.asarray(pi, dtype=float)
 
     log_pi = np.where(pi > 0, np.log(np.maximum(pi, 1e-300)), _LOG_EPS)
@@ -369,7 +414,11 @@ def logpmf_reported(y, mu, sigma, pi, ub, grids=GRIDS, dist="normal", tol=1e-8,
         (edge(np.floor(ub / g) * g + half) - loc) / sigma,
     )
 
-    comps = np.where(masks, log_pi[:, None] + log_bin - log_z, -np.inf)
+    # A component whose normaliser is -inf has no representable mass on the support at all;
+    # drop it instead of forming -inf - (-inf).
+    comps = np.where(masks & np.isfinite(log_z), log_pi[:, None] + log_bin - log_z, -np.inf)
 
     top = comps.max(axis=0)
-    return top + np.log(np.exp(comps - top[None, :]).sum(axis=0))
+    with np.errstate(invalid='ignore'):
+        out = top + np.log(np.exp(comps - top[None, :]).sum(axis=0))
+    return np.where(np.isfinite(top), out, -np.inf)

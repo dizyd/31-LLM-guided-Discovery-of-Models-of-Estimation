@@ -1,0 +1,12 @@
+{
+  "tag": "Mammals_RulEx-J_run0",
+  "domain": "Mammals",
+  "seed": "RulEx-J",
+  "run_id": 0,
+  "n_iterations": 5,
+  "dry_run": false,
+  "best_cv_ll": -19294.835375498085,
+  "n_models": 5,
+  "seconds": 5851.795673131943,
+  "slurm_job": "7033781"
+}

@@ -1,33 +1,24 @@
 model_string_CAM = '''
-
-NUM_PARAMETERS = 11
-BOUNDS         = [(-5000, 5000)] * (10 + 1) 
+NUM_PARAMETERS = 12
+BOUNDS         = [(-5000, 5000)] * 11 + [(-5, 12)]
 
 def model(parameters, cues, ex_cues=None, ex_crit=None):
     """
-    Compute predicted criterion estimate.
-
-    Parameters
-    ----------
-    parameters : np.ndarray of shape (num_parameters,)
-        Model parameters. intercept first, then one weight per cue
-
-    cues : np.ndarray of shape  (n_trials, n_dim)
-        Feature matrix of stimuli accross trials
+    Compute the latent estimate and the response noise.
 
     Returns
     -------
     pred_crit : np.ndarray of shape (n_trials,)
-        Predicted criterion estimates for each trial
+        Latent estimate in days for each trial
+    noise : dict
+        {"dist": "normal" or "lognormal", "scale": positive float or array of shape (n_trials,)}
     """
-    
-    n_dim      = cues.shape[1]
-    w          = parameters[:n_dim + 1]      # intercept + weights        
-
-    pred_crit  = w[0] + cues @ w[1:]
-
-    return pred_crit'''
-
+    n_dim     = cues.shape[1]
+    w         = parameters[:n_dim + 1]           # intercept + weights
+    pred_crit = w[0] + cues @ w[1:]
+    scale     = np.exp(parameters[n_dim + 1])    # noise SD in days
+    return pred_crit, {"dist": "normal", "scale": scale}
+'''
 
 model_string_GCM = '''
 
